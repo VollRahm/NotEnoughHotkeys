@@ -10,6 +10,6 @@ namespace NotEnoughHotkeys.Data.Types.Actions
     {
         string Name { get; set; }
         string TypeName { get; }
-        void Perform();
+        Task PerformAsync();
     }
 }

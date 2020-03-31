@@ -8,6 +8,7 @@ using RawInput_dll;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,13 +32,11 @@ namespace NotEnoughHotkeys.Forms
         {
             InitializeComponent();
             MainWindowHandlers.Init(this);
-            ObservableCollection<MacroItem> macros = new ObservableCollection<MacroItem>();
-            macros.Add(new MacroItem(Key.A,new LaunchProcessMacro("Chrome", null)));
-            macrosItemList.ItemsSource = macros;
         }
 
         private void ThisMainWindow_ContentRendered(object sender, EventArgs e)
         {
+            macrosItemList.ItemsSource = Variables.Macros;
             var handle = new WindowInteropHelper(this).Handle;
             rawInput = new RawInput(handle, false);
             rawInput.KeyPressed += new RawKeyboard.DeviceEventHandler(RawInputHandler);
@@ -65,7 +64,19 @@ namespace NotEnoughHotkeys.Forms
             }
             else
             {
-                
+                var ev = e.KeyPressEvent;
+                if(ev.DeviceName == Variables.TargetKeyboard.HWID)
+                {
+                    blockNextKeystroke = true;
+                    if(ev.KeyPressState == KEYUP)
+                    {
+                        _ = HandleMacroAsync(e.KeyPressEvent.VKey);
+                    }
+                }
+                else
+                {
+                    blockNextKeystroke = false;
+                }
             }
         }
 
@@ -75,10 +86,31 @@ namespace NotEnoughHotkeys.Forms
         {
             if (msg == WH_HOOK) //if the message is from the Keyboard Hook dll
             {
-                if (IsSettingKeyboard) return new IntPtr(1);
+                Task.Delay(1).GetAwaiter().GetResult();
 
+                if (blockNextKeystroke || IsSettingKeyboard)
+                {
+                    blockNextKeystroke = false;
+                    handled = true;
+                    return new IntPtr(1);                    
+                }
+
+               
             }
             return IntPtr.Zero;
+        }
+
+        private async Task HandleMacroAsync(int keycode)
+        {
+            Key key = KeyInterop.KeyFromVirtualKey(keycode);
+            foreach(var macro in Variables.Macros)
+            {
+                if(macro.Hotkey == key)
+                {
+                    _ = macro.Action.PerformAsync();
+                }
+            }
+            await Task.Delay(0);
         }
 
         private void selectKeyboardBtn_Click(object sender, RoutedEventArgs e)

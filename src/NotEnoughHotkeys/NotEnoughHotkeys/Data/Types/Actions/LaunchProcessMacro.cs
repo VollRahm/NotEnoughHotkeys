@@ -12,17 +12,18 @@ namespace NotEnoughHotkeys.Data.Types.Actions
         public string Name { get; set; }
         public string TypeName { get => "Launch Process"; }
 
-        private Process process;
+        private ProcessStartInfo processInfo;
 
-        public LaunchProcessMacro(string name, Process proc)
+        public LaunchProcessMacro(string name, ProcessStartInfo proc)
         {
             Name = name;
-            process = proc;
+            processInfo = proc;
         }
 
-        public void Perform()
+        public async Task PerformAsync()
         {
-            process.Start();
+            Process.Start(processInfo);
+            await Task.Delay(0);
         }
 
     }
