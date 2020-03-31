@@ -2,8 +2,33 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:NotEnoughHotkeys"
-             StartupUri="MainWindow.xaml">
+             xmlns:wpf="http://materialdesigninxaml.net/winfx/xaml/themes"
+             StartupUri="Forms\MainWindow.xaml">
     <Application.Resources>
-         
+        
+
+        <ResourceDictionary>
+            
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                <ResourceDictionary>
+
+
+                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#e88717"/>
+                    <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="#000000"></SolidColorBrush>
+
+
+                    <SolidColorBrush x:Key="PrimaryBackgroundAccent">#2B2B2B</SolidColorBrush>
+                    <SolidColorBrush x:Key="TopBarColor">#F49923</SolidColorBrush>
+                    <SolidColorBrush x:Key="PrimaryForegroundAccent">#FFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="SecondaryBackgroundAccent">#212121</SolidColorBrush>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+        
     </Application.Resources>
 </Application>
