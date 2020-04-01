@@ -58,7 +58,7 @@
                         <Label Content="Click the Add button to create a new macro"
                            Visibility="Hidden"  VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="DemiBold" FontSize="25"/>
 
-                        <ListView x:Name="macrosItemList"  Margin="1" HorizontalContentAlignment="Stretch">
+                        <ListView x:Name="macrosItemList" SelectionChanged="macrosItemList_SelectionChanged" Margin="1" HorizontalContentAlignment="Stretch">
                             <ListView.ItemTemplate>
                                 <DataTemplate DataType="{x:Type types:MacroItem}">
                                     <StackPanel HorizontalAlignment="Stretch" Margin="5,0,5,0">
@@ -87,7 +87,7 @@
             </Grid>
 
             <Grid Grid.Row="3" Margin="10,0,10,10">
-                <Button x:Name="addMacroBtn" Height="30" Width="30" Padding="0" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Button x:Name="addMacroBtn" Height="30" Width="30" Padding="0" Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="addMacroBtn_Click">
                     <materialDesign:PackIcon
                                 Kind="Add"
                                 Height="24"

@@ -8,7 +8,7 @@ namespace NotEnoughHotkeys.Data
 {
     public static class Constants
     {
-        public const string NEHHookDLL = "NEHKbdHook.dll";
+        public const string NEHHookDLL = "NEHKBDHOOK.dll";
 
         public const uint WH_HOOK = 32769;
 

@@ -38,6 +38,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Costura, Version=4.1.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
       <HintPath>..\packages\Costura.Fody.4.1.0\lib\net40\Costura.dll</HintPath>
@@ -74,6 +77,7 @@
     <Compile Include="Data\Constants.cs" />
     <Compile Include="Data\Types\Actions\IMacroAction.cs" />
     <Compile Include="Data\Types\Actions\LaunchProcessMacro.cs" />
+    <Compile Include="Data\Types\Actions\SendKeysMacro.cs" />
     <Compile Include="Data\Types\Keyboard.cs" />
     <Compile Include="Data\Types\MacroItem.cs" />
     <Compile Include="Data\Variables.cs" />
@@ -81,6 +85,10 @@
       <DependentUpon>KeyboardInfoWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\KeyboardInfoWindowHandlers.cs" />
+    <Compile Include="Forms\MacroEditWindow.xaml.cs">
+      <DependentUpon>MacroEditWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MacroEditWindowHandlers.cs" />
     <Compile Include="KeyboardHook\NEHHook.cs" />
     <Compile Include="Misc\Helper.cs" />
     <Compile Include="RawInput\DataStructures.cs" />
@@ -94,6 +102,10 @@
     <Compile Include="RawInput\RegistryAccess.cs" />
     <Compile Include="RawInput\Win32.cs" />
     <Page Include="Forms\KeyboardInfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\MacroEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -129,6 +141,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

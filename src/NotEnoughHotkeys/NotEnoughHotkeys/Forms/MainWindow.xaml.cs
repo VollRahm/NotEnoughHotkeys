@@ -27,7 +27,7 @@ namespace NotEnoughHotkeys.Forms
         private bool IsSettingKeyboard = false;
 
         private RawInput rawInput;
-
+      
         public MainWindow()
         {
             InitializeComponent();
@@ -86,13 +86,12 @@ namespace NotEnoughHotkeys.Forms
         {
             if (msg == WH_HOOK) //if the message is from the Keyboard Hook dll
             {
-                Task.Delay(1).GetAwaiter().GetResult();
-
                 if (blockNextKeystroke || IsSettingKeyboard)
                 {
-                    blockNextKeystroke = false;
+                    Console.WriteLine("Blocking");
                     handled = true;
-                    return new IntPtr(1);                    
+                    blockNextKeystroke = false;
+                    return new IntPtr(-1);
                 }
 
                
@@ -125,7 +124,19 @@ namespace NotEnoughHotkeys.Forms
         private void kbdInfoBtn_Click(object sender, RoutedEventArgs e)
         {
             KeyboardInfoWindow kiw = new KeyboardInfoWindow(Variables.TargetKeyboard);
+            Clipboard.SetText(Variables.TargetKeyboard.HWID);
             kiw.Show();
+        }
+
+        private void macrosItemList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            editMacroBtn.IsEnabled = !(macrosItemList.SelectedItems.Count > 1);
+        }
+
+        private void addMacroBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MacroEditWindow mew = new MacroEditWindow(null, true);
+            mew.Show();
         }
     }
 }

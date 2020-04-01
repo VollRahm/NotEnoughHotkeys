@@ -1,12 +1,11 @@
-﻿<Window x:Class="NotEnoughHotkeys.Forms.KeyboardInfoWindow"
+﻿<Window x:Class="NotEnoughHotkeys.Forms.MacroEditWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NotEnoughHotkeys.Forms"
         mc:Ignorable="d"
-        Title="Keyboard" Height="187.347" Width="634.17" Background="{DynamicResource PrimaryBackgroundAccent}"
+        Title="New Macro" Height="569" Width="464" Background="{DynamicResource PrimaryBackgroundAccent}"
         WindowStyle="None" BorderBrush="{DynamicResource SecondaryBackgroundAccent}" Name="ThisWindow" BorderThickness="1.2" ResizeMode="NoResize" FontFamily="{DynamicResource MaterialDesignFont}" AllowsTransparency="True">
     <Grid>
         <StackPanel>
@@ -15,15 +14,13 @@
                 <Label Content="{Binding ElementName=ThisWindow, Path=Title}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
                    FontSize="17" FontWeight="Light" Padding="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </Grid>
-
             <StackPanel Margin="10,10,10,0">
-                <TextBlock x:Name="hwidLbl" Text="HardwareID: " FontSize="15" TextWrapping="Wrap" Foreground="{DynamicResource PrimaryForegroundAccent}"></TextBlock>
-                <Label x:Name="layoutLbl" Content="Layout: " FontSize="15"></Label>
-                <Label x:Name="descLbl" Content="Description: " FontSize="15"></Label>
+                <DockPanel>
+                    <Label VerticalContentAlignment="Center" Padding="0" Content="Name:" FontSize="16"></Label>
+                    <TextBox Margin="10,0,0,0" x:Name="nameTb" FontSize="15" Foreground="{DynamicResource PrimaryForegroundAccent}"  HorizontalAlignment="Stretch"></TextBox>
+                </DockPanel>
+                
             </StackPanel>
-
         </StackPanel>
-        <Button VerticalAlignment="Bottom" Content="OK" HorizontalAlignment="Right" Margin="0,0,10,10" Click="Button_Click"/>
-
     </Grid>
 </Window>
