@@ -5,8 +5,11 @@
 #include "framework.h"
 #include "NEH_KbdHook.h"
 
+#pragma data_seg (".SHARED")
 HWND callback_reciever = NULL;
 HHOOK kbHook = NULL;
+#pragma data_seg ()
+#pragma comment (linker, "/section:.SHARED,RWS")
 
 BOOL alreadyHooked = false;
 
