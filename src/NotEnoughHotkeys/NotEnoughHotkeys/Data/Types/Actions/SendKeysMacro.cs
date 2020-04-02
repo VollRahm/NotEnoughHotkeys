@@ -12,7 +12,7 @@ namespace NotEnoughHotkeys.Data.Types.Actions
         public string Name { get; set; }
         public string TypeName { get => "Send Keystrokes"; }
 
-        private string Keystrokes;
+        public string Keystrokes { get; set; }
 
         public SendKeysMacro(string name, string keystrokes)
         {

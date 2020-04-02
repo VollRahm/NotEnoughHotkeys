@@ -1,15 +1,15 @@
-﻿using MaterialDesignThemes.Wpf;
-using NotEnoughHotkeys.Data;
+﻿using NotEnoughHotkeys.Data;
 using NotEnoughHotkeys.Data.Types;
 using NotEnoughHotkeys.Data.Types.Actions;
-using NotEnoughHotkeys.KeyboardHook;
 using NotEnoughHotkeys.Misc;
+using NotEnoughHotkeys.SubprocessAPI;
 using RawInput_dll;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -25,9 +25,14 @@ namespace NotEnoughHotkeys.Forms
     public partial class MainWindow : Window
     {
         private bool IsSettingKeyboard = false;
+        private bool IsStartedAsAdmin = false;
 
         private RawInput rawInput;
-      
+
+        private NEHSubprocess UserSubprocess;
+        private NEHSubprocess AdminSubprocess;
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,13 +42,11 @@ namespace NotEnoughHotkeys.Forms
         private void ThisMainWindow_ContentRendered(object sender, EventArgs e)
         {
             macrosItemList.ItemsSource = Variables.Macros;
-            var handle = new WindowInteropHelper(this).Handle;
-            rawInput = new RawInput(handle, false);
+             
+            IsStartedAsAdmin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+            var Handle = new WindowInteropHelper(this).Handle;
+            rawInput = new RawInput(Handle, false);
             rawInput.KeyPressed += new RawKeyboard.DeviceEventHandler(RawInputHandler);
-
-            HwndSource source = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
-            source.AddHook(new HwndSourceHook(WndProc)); //override WndProc
-            var result = NEHHook.StartHook(handle);
         }
 
         private void RawInputHandler(object sender, RawInputEventArg e)
@@ -60,43 +63,26 @@ namespace NotEnoughHotkeys.Forms
                 currentKeyboardLbl.Content = "Keyboard: " + e.KeyPressEvent.Name;
                 currentKeyboardLbl.Foreground = Helper.GetFromResources<SolidColorBrush>("PrimaryForegroundAccent");
                 kbdInfoBtn.IsEnabled = true;
-                IsSettingKeyboard = false;                
-            }
-            else
-            {
-                var ev = e.KeyPressEvent;
-                if(ev.DeviceName == Variables.TargetKeyboard.HWID)
+                IsSettingKeyboard = false;
+                
+                UserSubprocess = new NEHSubprocess(false, kbd.HWID, PIPENAME);
+                if (IsStartedAsAdmin)
                 {
-                    blockNextKeystroke = true;
-                    if(ev.KeyPressState == KEYUP)
-                    {
-                        _ = HandleMacroAsync(e.KeyPressEvent.VKey);
-                    }
+                    AdminSubprocess = new NEHSubprocess(true, kbd.HWID, PIPENAME_ADMIN);
+                    AdminSubprocess.KeyEventRecieved += new NEHSubprocess.KeyEventRecievedHandler(KeyPressRecieved);
+                    _ = AdminSubprocess.StartProcess();
                 }
-                else
-                {
-                    blockNextKeystroke = false;
-                }
+                UserSubprocess.KeyEventRecieved += new NEHSubprocess.KeyEventRecievedHandler(KeyPressRecieved);
+                _ = UserSubprocess.StartProcess();
             }
         }
 
-        private bool blockNextKeystroke = false;
-
-        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        private void KeyPressRecieved(object sender, NEHKeyPressEventArgs e)
         {
-            if (msg == WH_HOOK) //if the message is from the Keyboard Hook dll
+            if(e.State == NEHKeyState.KeyUp)
             {
-                if (blockNextKeystroke || IsSettingKeyboard)
-                {
-                    Console.WriteLine("Blocking");
-                    handled = true;
-                    blockNextKeystroke = false;
-                    return new IntPtr(-1);
-                }
-
-               
+                _ = HandleMacroAsync(e.KeyCode);
             }
-            return IntPtr.Zero;
         }
 
         private async Task HandleMacroAsync(int keycode)
@@ -112,7 +98,7 @@ namespace NotEnoughHotkeys.Forms
             await Task.Delay(0);
         }
 
-        private void selectKeyboardBtn_Click(object sender, RoutedEventArgs e)
+        private void SelectKeyboardBtn_Click(object sender, RoutedEventArgs e)
         {
             selectKeyboardBtn.Content = "Waiting...";
             selectKeyboardBtn.IsHitTestVisible = false; //disable button click handler
@@ -121,21 +107,32 @@ namespace NotEnoughHotkeys.Forms
             IsSettingKeyboard = true;
         }
 
-        private void kbdInfoBtn_Click(object sender, RoutedEventArgs e)
+        private void KbdInfoBtn_Click(object sender, RoutedEventArgs e)
         {
             KeyboardInfoWindow kiw = new KeyboardInfoWindow(Variables.TargetKeyboard);
             Clipboard.SetText(Variables.TargetKeyboard.HWID);
             kiw.Show();
         }
 
-        private void macrosItemList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void MacrosItemList_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             editMacroBtn.IsEnabled = !(macrosItemList.SelectedItems.Count > 1);
         }
 
-        private void addMacroBtn_Click(object sender, RoutedEventArgs e)
+        private void AddMacroBtn_Click(object sender, RoutedEventArgs e)
         {
-            MacroEditWindow mew = new MacroEditWindow(null, true);
+            MacroEditWindow mew = new MacroEditWindow(null);
+            mew.Show();
+        }
+
+        private void RemoveMacroBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ((List<MacroItem>)macrosItemList.SelectedItems).ForEach(x => Variables.Macros.Remove(x));
+        }
+
+        private void EditMacroBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MacroEditWindow mew = new MacroEditWindow((MacroItem)macrosItemList.SelectedItem);
             mew.Show();
         }
     }

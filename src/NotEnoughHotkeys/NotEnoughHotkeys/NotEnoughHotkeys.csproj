@@ -89,8 +89,9 @@
       <DependentUpon>MacroEditWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\MacroEditWindowHandlers.cs" />
-    <Compile Include="KeyboardHook\NEHHook.cs" />
+    <Compile Include="SubprocessAPI\ProcessLauncher.cs" />
     <Compile Include="Misc\Helper.cs" />
+    <Compile Include="Misc\PipeServer.cs" />
     <Compile Include="RawInput\DataStructures.cs" />
     <Compile Include="RawInput\Enumerations.cs" />
     <Compile Include="RawInput\KeyMapper.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="RawInput\RawKeyboard.cs" />
     <Compile Include="RawInput\RegistryAccess.cs" />
     <Compile Include="RawInput\Win32.cs" />
+    <Compile Include="SubprocessAPI\NEHSubprocess.cs" />
     <Page Include="Forms\KeyboardInfoWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
