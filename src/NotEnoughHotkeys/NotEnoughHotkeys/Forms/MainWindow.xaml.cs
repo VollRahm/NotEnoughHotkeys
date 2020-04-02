@@ -44,6 +44,10 @@ namespace NotEnoughHotkeys.Forms
             macrosItemList.ItemsSource = Variables.Macros;
              
             IsStartedAsAdmin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+            if (!IsStartedAsAdmin)
+            {
+                MessageBox.Show("Note: NotEnoughHotkeys was started without Admin permissions. Macros will not work inside windows of processes with Admin privileges.", "Disclaimer", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
             var Handle = new WindowInteropHelper(this).Handle;
             rawInput = new RawInput(Handle, false);
             rawInput.KeyPressed += new RawKeyboard.DeviceEventHandler(RawInputHandler);
