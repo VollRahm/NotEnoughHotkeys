@@ -98,8 +98,11 @@ namespace NotEnoughHotkeys.Forms
             await Task.Delay(0);
         }
 
-        private void SelectKeyboardBtn_Click(object sender, RoutedEventArgs e)
+        private async void SelectKeyboardBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (UserSubprocess != null) await UserSubprocess.StopProcess();
+            if (AdminSubprocess != null) await AdminSubprocess.StopProcess();
+
             selectKeyboardBtn.Content = "Waiting...";
             selectKeyboardBtn.IsHitTestVisible = false; //disable button click handler
             currentKeyboardLbl.Content = "Press any key on the desired keyboard";

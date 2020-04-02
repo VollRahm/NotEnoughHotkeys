@@ -95,6 +95,7 @@ namespace NEHSubprocess
             if (isAdminProcess)
                 if (!ProcessHelper.IsForegroundProcessAdmin()) return;
 
+            Console.WriteLine($"{Status} {vKey}");
             bool success = await pipeClient.Send($"{Status} {vKey}");
             if (!success)
             {

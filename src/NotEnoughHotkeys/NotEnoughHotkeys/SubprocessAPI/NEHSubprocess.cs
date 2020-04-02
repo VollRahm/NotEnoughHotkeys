@@ -37,7 +37,7 @@ namespace NotEnoughHotkeys.SubprocessAPI
 
         private void PipeClosed(object sender, EventArgs e)
         {
-            ProcessEnded.Invoke(this, null);
+            ProcessEnded?.Invoke(this, null);
         }
 
         private void PipeMessageRecieved(string Reply)
@@ -47,7 +47,7 @@ namespace NotEnoughHotkeys.SubprocessAPI
             int KeyCode = int.Parse(command[1]);
             Key key = KeyInterop.KeyFromVirtualKey(KeyCode);
             NEHKeyPressEventArgs eventArgs = new NEHKeyPressEventArgs(state, key, KeyCode);
-            KeyEventRecieved.Invoke(this, eventArgs);
+            KeyEventRecieved?.Invoke(this, eventArgs);
         }
 
         public async Task StartProcess()
@@ -68,9 +68,9 @@ namespace NotEnoughHotkeys.SubprocessAPI
         {
             await Pipe.StopReadingAsync();
             if (IsAdmin)
-                Process.GetProcessesByName(ExecutablePathAdmin).ToList().ForEach(x => x.Kill());
+                Process.GetProcessesByName(ExecutablePathAdmin.Split('\\').Last().Remove(ExecutablePathAdmin.Split('\\').Last().Length - 4)).ToList().ForEach(x => x.Kill());
             else
-                Process.GetProcessesByName(ExecutablePath).ToList().ForEach(x => x.Kill());
+                Process.GetProcessesByName(ExecutablePath.Split('\\').Last().Remove(ExecutablePath.Split('\\').Last().Length - 4)).ToList().ForEach(x => x.Kill());
         }
     }
 
