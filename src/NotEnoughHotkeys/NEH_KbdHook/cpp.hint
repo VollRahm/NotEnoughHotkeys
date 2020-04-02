@@ -1,0 +1,2 @@
+#define NEHKBDHOOK_API __declspec(dllexport)
+#define NEHKBDHOOK_API __declspec(dllimport)
