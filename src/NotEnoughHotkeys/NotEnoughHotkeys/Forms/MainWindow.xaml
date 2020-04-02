@@ -112,7 +112,7 @@
                         HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
                 
                 <Button x:Name="quitAppBtn" Content="Quit" Margin="0,0,70,0" 
-                        HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                        HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="QuitAppBtn_Click"/>
 
 
 

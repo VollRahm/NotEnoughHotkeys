@@ -138,5 +138,13 @@ namespace NotEnoughHotkeys.Forms
             MacroEditWindow mew = new MacroEditWindow((MacroItem)macrosItemList.SelectedItem);
             mew.Show();
         }
+
+        private async void QuitAppBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (UserSubprocess != null) await UserSubprocess.StopProcess();
+            if (AdminSubprocess != null) await AdminSubprocess.StopProcess();
+            this.Close();
+            Environment.Exit(0);
+        }
     }
 }
