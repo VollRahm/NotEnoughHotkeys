@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -134,7 +135,7 @@ namespace NotEnoughHotkeys.Forms
 
         private void RemoveMacroBtn_Click(object sender, RoutedEventArgs e)
         {
-            ((List<MacroItem>)macrosItemList.SelectedItems).ForEach(x => Variables.Macros.Remove(x));
+            macrosItemList.SelectedItems.OfType<MacroItem>().ToList().ForEach(x => Variables.Macros.Remove(x));
         }
 
         private void EditMacroBtn_Click(object sender, RoutedEventArgs e)
