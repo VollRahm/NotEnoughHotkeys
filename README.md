@@ -15,7 +15,7 @@ This is an Application to block input from a secondary keyboard and instead run 
 * ⭕ Maybe your ideas! Submit them as issues with the idea tag!
 ---
 * ❌ Blocking Windows Key, Alt+Tab and State Keys (Caps Lock, Num Lock) because those are sent before RawInput gets anything 
-
+---
 ✔ = Implemented, ⭕ = Scheduled implementation, ❌ = Most Likely not implementable
 
 ## Building
