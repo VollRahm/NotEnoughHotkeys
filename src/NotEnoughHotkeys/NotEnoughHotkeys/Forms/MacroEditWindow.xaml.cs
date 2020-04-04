@@ -113,9 +113,18 @@ namespace NotEnoughHotkeys.Forms
 
         private void ChoosePathBtn_Click(object sender, RoutedEventArgs e)
         {
+            string InitalDir = Directory.GetCurrentDirectory();
+            try
+            {
+                DirectoryInfo directory = new DirectoryInfo(lp_procPathTb.Text);
+                if (Directory.Exists(directory.FullName))
+                    InitalDir = directory.FullName;
+            }
+            catch { }
+
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog
             {
-                InitialDirectory = Directory.GetCurrentDirectory(),
+                InitialDirectory = InitalDir,
                 Filter = "Executables (*.exe)|*.exe|AHK-Scripts (*.ahk)|*.ahk|All files (*.*)|*.*",
                 FilterIndex = 3,
                 Multiselect = false
