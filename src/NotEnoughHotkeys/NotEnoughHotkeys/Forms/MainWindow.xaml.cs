@@ -47,7 +47,15 @@ namespace NotEnoughHotkeys.Forms
             IsStartedAsAdmin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
             if (!IsStartedAsAdmin)
             {
-                MessageBox.Show("Note: NotEnoughHotkeys was started without Admin permissions. Macros will not work inside windows of processes with Admin privileges.", "Disclaimer", MessageBoxButton.OK, MessageBoxImage.Information);
+                var result = MessageBox.Show("Note: NotEnoughHotkeys was started without Admin permissions. It will only work partially and won't work inside processes with admin privileges. Do you want to restart as Admin? ", "Disclaimer", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if(result == MessageBoxResult.Yes)
+                {
+                    ProcessStartInfo psi = new ProcessStartInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                    psi.UseShellExecute = true;
+                    psi.Verb = "runas";
+                    Process.Start(psi);
+                    Environment.Exit(0);
+                }
             }
             var Handle = new WindowInteropHelper(this).Handle;
             rawInput = new RawInput(Handle, false);
