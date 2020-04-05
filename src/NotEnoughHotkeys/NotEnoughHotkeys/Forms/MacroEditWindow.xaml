@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NotEnoughHotkeys.Forms"
         mc:Ignorable="d"
-        Title="New Macro" Height="390" Width="388" Background="{DynamicResource PrimaryBackgroundAccent}"
+        Title="New Macro" Height="427" Width="455" Background="{DynamicResource PrimaryBackgroundAccent}"
         WindowStyle="None" BorderBrush="{DynamicResource SecondaryBackgroundAccent}" Name="ThisWindow" BorderThickness="1.2" ResizeMode="NoResize" FontFamily="{DynamicResource MaterialDesignFont}" AllowsTransparency="True"
         Loaded="ThisWindow_Loaded">
     <Grid>
@@ -82,13 +82,27 @@
                                 <RowDefinition Height="30"/>
                                 <RowDefinition Height="10"/>
                                 <RowDefinition Height="40"/>
+                                <RowDefinition Height="15"/>
+                                <RowDefinition Height="40"/>
                             </Grid.RowDefinitions>
 
                             <Label Grid.Column="0" VerticalContentAlignment="Center" Padding="0" Content="Arguments:" FontSize="17"></Label>
-                            <TextBox Margin="10,0,0,0" materialDesign:HintAssist.Hint="Type it in here" x:Name="lp_procArgsTb" Grid.Column="1" FontSize="15" Foreground="{DynamicResource PrimaryForegroundAccent}"  HorizontalAlignment="Stretch"></TextBox>
+                            <TextBox Margin="10,0,0,0" x:Name="lp_procArgsTb" Grid.Column="1" FontSize="15" Foreground="{DynamicResource PrimaryForegroundAccent}"  HorizontalAlignment="Stretch"></TextBox>
 
-                            <Label Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Center" Padding="0" Grid.ColumnSpan="2" Content="Launch as Admin:" FontSize="17"></Label>
-                            <ToggleButton Grid.Row="2" x:Name="lp_adminTBtn" Grid.ColumnSpan="2"></ToggleButton>
+                            <Grid Grid.Row="2" Grid.ColumnSpan="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="1.5*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" VerticalContentAlignment="Center" Padding="0" Content="Launch Path:" Grid.Row="2" Grid.ColumnSpan="2" FontSize="17"></Label>
+                                <TextBox Margin="10,0,0,0" x:Name="lp_procStartPathTb" materialDesign:HintAssist.HelperText="Leave empty for File Directory" Grid.RowSpan="1" Grid.Column="1" FontSize="15" Foreground="{DynamicResource PrimaryForegroundAccent}" Grid.Row="2" HorizontalAlignment="Stretch"></TextBox>
+                                <Button Grid.Column="2" Click="ChooseStartPathBtn_Click" Height="30" Margin="5,0,0,0" Content="Choose"></Button>
+                            </Grid>
+                            
+                            
+                            <Label Grid.Column="0" Grid.Row="24" VerticalContentAlignment="Center" Padding="0" Grid.ColumnSpan="2" Content="Launch as Admin:" FontSize="17"></Label>
+                            <ToggleButton Grid.Row="4" x:Name="lp_adminTBtn" Grid.ColumnSpan="2"></ToggleButton>
                         </Grid>
 
                     </StackPanel>

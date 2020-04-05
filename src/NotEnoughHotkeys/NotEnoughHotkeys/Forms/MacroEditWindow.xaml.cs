@@ -17,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WindowsFormsApplication1;
 
 namespace NotEnoughHotkeys.Forms
 {
@@ -97,6 +98,7 @@ namespace NotEnoughHotkeys.Forms
             lp_procPathTb.Text = action.ProcessInfo.FileName;
             lp_procArgsTb.Text = action.ProcessInfo.Arguments;
             lp_adminTBtn.IsChecked = action.LaunchAsAdmin;
+            lp_procStartPathTb.Text = action.ProcessInfo.WorkingDirectory;
         }
 
         private void FillSendKeysPanel()
@@ -119,6 +121,8 @@ namespace NotEnoughHotkeys.Forms
                 DirectoryInfo directory = new DirectoryInfo(lp_procPathTb.Text);
                 if (Directory.Exists(directory.FullName))
                     InitalDir = directory.FullName;
+                else if (File.Exists(directory.FullName))
+                    InitalDir = new FileInfo(directory.FullName).DirectoryName;
             }
             catch { }
 
@@ -134,6 +138,34 @@ namespace NotEnoughHotkeys.Forms
             {
                 lp_procPathTb.Text = ofd.FileName;
             }
+        }
+
+        private void ChooseStartPathBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string InitalDir = Directory.GetCurrentDirectory();
+            try
+            {
+                string startDir = lp_procStartPathTb.Text;
+                if (string.IsNullOrEmpty(startDir)) startDir = lp_procPathTb.Text;
+                DirectoryInfo directory = new DirectoryInfo(lp_procStartPathTb.Text);
+                if (Directory.Exists(directory.FullName))
+                    InitalDir = directory.FullName;
+                else if (File.Exists(directory.FullName))
+                    InitalDir = new FileInfo(directory.FullName).DirectoryName;
+            }
+            catch { }
+
+            Ookii.Dialogs.Wpf.VistaFolderBrowserDialog ofd = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog
+            { 
+                SelectedPath = InitalDir
+            };
+            var result = ofd.ShowDialog();
+
+            if (result.Value)
+            {
+                lp_procStartPathTb.Text = ofd.SelectedPath;
+            }
+            
         }
 
         private void DoneBtn_Click(object sender, RoutedEventArgs e)
@@ -153,7 +185,7 @@ namespace NotEnoughHotkeys.Forms
             IMacroAction action = null;
             if (launchProcRb.IsChecked.Value)
             {
-                action = new LaunchProcessMacro(nameTb.Text, new ProcessStartInfo(lp_procPathTb.Text, lp_procArgsTb.Text), lp_adminTBtn.IsChecked.Value);
+                action = new LaunchProcessMacro(nameTb.Text, new ProcessStartInfo(lp_procPathTb.Text, lp_procArgsTb.Text) { WorkingDirectory = lp_procStartPathTb.Text }, lp_adminTBtn.IsChecked.Value);
             }
             else if (sendKeysRb.IsChecked.Value)
             {
