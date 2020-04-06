@@ -101,6 +101,7 @@
     <Compile Include="Data\Constants.cs" />
     <Compile Include="Data\Types\Actions\IMacroAction.cs" />
     <Compile Include="Data\Types\Actions\LaunchProcessMacro.cs" />
+    <Compile Include="Data\Types\Actions\SendKeycodeMacro.cs" />
     <Compile Include="Data\Types\Actions\SendKeysMacro.cs" />
     <Compile Include="Data\Types\Keyboard.cs" />
     <Compile Include="Data\Types\MacroItem.cs" />
@@ -113,11 +114,6 @@
       <DependentUpon>MacroEditWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\MacroEditWindowHandlers.cs" />
-    <Compile Include="Misc\OpenFolderDialog\InteropUtil.cs" />
-    <Compile Include="Misc\OpenFolderDialog\OpenFolderDialog.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Misc\OpenFolderDialog\Util.cs" />
     <Compile Include="SubprocessAPI\ProcessLauncher.cs" />
     <Compile Include="Misc\Helper.cs" />
     <Compile Include="Misc\PipeServer.cs" />

@@ -6,15 +6,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NotEnoughHotkeys.Forms"
         mc:Ignorable="d"
-        Title="New Macro" Height="427" Width="455" Background="{DynamicResource PrimaryBackgroundAccent}"
+        Title="New Macro" Height="448" Width="455" Background="{DynamicResource PrimaryBackgroundAccent}"
         WindowStyle="None" BorderBrush="{DynamicResource SecondaryBackgroundAccent}" Name="ThisWindow" BorderThickness="1.2" ResizeMode="NoResize" FontFamily="{DynamicResource MaterialDesignFont}" AllowsTransparency="True"
         Loaded="ThisWindow_Loaded">
     <Grid>
         <Grid x:Name="TopBar" Height="25" VerticalAlignment="Top">
-                <Rectangle Fill="{DynamicResource TopBarColor}" StrokeThickness="0"></Rectangle>
-                <Label Content="{Binding ElementName=ThisWindow, Path=Title}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
+            <Rectangle Fill="{DynamicResource TopBarColor}" StrokeThickness="0"></Rectangle>
+            <Label Content="{Binding ElementName=ThisWindow, Path=Title}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
                    FontSize="17" FontWeight="Light" Padding="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            </Grid>
+        </Grid>
 
         <Grid Margin="10,35,10,0" VerticalAlignment="Stretch">
             <Grid.Resources>
@@ -24,7 +24,7 @@
             </Grid.Resources>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="130"/>
+                <RowDefinition Height="150"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
@@ -39,7 +39,6 @@
                         <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="128*"/>
                         <ColumnDefinition Width="91*"/>
-
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0" VerticalContentAlignment="Center" Padding="0" Content="Hotkey:" FontSize="16"></Label>
                     <TextBox Margin="10,0,0,0" PreviewKeyDown="HotkeyTb_PreviewKeyDown" materialDesign:HintAssist.Hint="Type it in here" x:Name="hotkeyTb" Grid.Column="1" FontSize="15" Foreground="{DynamicResource PrimaryForegroundAccent}"  HorizontalAlignment="Stretch"></TextBox>
@@ -51,15 +50,22 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
 
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height ="1*"/>
+                    </Grid.RowDefinitions>
+
                     <RadioButton Grid.Column="0" Checked="RadioButton_Checked" Content="Launch Process" x:Name="launchProcRb" HorizontalAlignment="Left" Margin="5,0,0,0" Foreground="{DynamicResource PrimaryForegroundAccent}" FontSize="15" VerticalContentAlignment="Center"/>
                     <RadioButton Grid.Column="1" Checked="RadioButton_Checked" Content="Send Keystrokes" x:Name="sendKeysRb" HorizontalAlignment="Left" Margin="5,0,0,0" Foreground="{DynamicResource PrimaryForegroundAccent}" FontSize="15" VerticalContentAlignment="Center"/>
+                    <RadioButton Grid.Column="0" Grid.Row="2" Checked="RadioButton_Checked" Content="Send Single Keycode" x:Name="sendKeycodeRb" HorizontalAlignment="Left" Margin="5,0,0,0" Foreground="{DynamicResource PrimaryForegroundAccent}" FontSize="15" VerticalContentAlignment="Center"/>
                 </Grid>
             </StackPanel>
 
             <Border Grid.Row="1" Margin="10,10,10,0" ClipToBounds="True" CornerRadius="7" VerticalAlignment="Stretch"
                     HorizontalAlignment="Stretch" Background="{DynamicResource SecondaryBackgroundAccent}">
                 <Grid Margin="0">
-                    <StackPanel Margin="10,0,10,0" Visibility="Visible" x:Name="launchProcPanel">
+                    <StackPanel Margin="10,0,10,0" Visibility="Hidden" x:Name="launchProcPanel">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="45"/>
@@ -99,8 +105,8 @@
                                 <TextBox Margin="10,0,0,0" x:Name="lp_procStartPathTb" materialDesign:HintAssist.HelperText="Leave empty for File Directory" Grid.RowSpan="1" Grid.Column="1" FontSize="15" Foreground="{DynamicResource PrimaryForegroundAccent}" Grid.Row="2" HorizontalAlignment="Stretch"></TextBox>
                                 <Button Grid.Column="2" Click="ChooseStartPathBtn_Click" Height="30" Margin="5,0,0,0" Content="Choose"></Button>
                             </Grid>
-                            
-                            
+
+
                             <Label Grid.Column="0" Grid.Row="24" VerticalContentAlignment="Center" Padding="0" Grid.ColumnSpan="2" Content="Launch as Admin:" FontSize="17"></Label>
                             <ToggleButton Grid.Row="4" x:Name="lp_adminTBtn" Grid.ColumnSpan="2"></ToggleButton>
                         </Grid>
@@ -116,7 +122,24 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Grid.Column="0" VerticalContentAlignment="Center" Padding="0" Content="Keystrokes: " FontSize="17"></Label>
-                            <TextBox Grid.Column="1" materialDesign:HintAssist.HelperText="Example: Hello World {ENTER}" Margin="10,0,0,0" x:Name="sK_KeystokeTb" FontSize="16" Foreground="{DynamicResource PrimaryForegroundAccent}"  HorizontalAlignment="Stretch"></TextBox>
+                            <TextBox Grid.Column="1" materialDesign:HintAssist.HelperText="Example: Hello World {ENTER}" Margin="10,0,0,0" x:Name="sK_KeystrokeTb" FontSize="16" Foreground="{DynamicResource PrimaryForegroundAccent}"  HorizontalAlignment="Stretch"></TextBox>
+                        </Grid>
+                    </StackPanel>
+
+                    <StackPanel Margin="10,0,10,0" Visibility="Visible" x:Name="sendKeycodePanel">
+                        <Grid Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="29*"/>
+                                <ColumnDefinition Width="21*"/>
+                                <ColumnDefinition Width="51*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0" VerticalContentAlignment="Center" Padding="0" Content="Keycode: " FontSize="17"></Label>
+                            <TextBox Grid.Column="1" PreviewTextInput="sKc_KeycodeTb_PreviewTextInput" DataObject.Pasting="sKc_KeycodeTb_Pasting" materialDesign:HintAssist.HelperText="From 0 - 254" Margin="10,0,0,0" x:Name="sKc_KeycodeTb" FontSize="16" Foreground="{DynamicResource PrimaryForegroundAccent}"  HorizontalAlignment="Stretch"></TextBox>
+                            <Label Grid.Column="2"  VerticalContentAlignment="Center" Padding="0" Content="or" FontSize="17" HorizontalAlignment="Center" Margin="23,0,24,0" Width="16"></Label>
+                            <ComboBox Grid.Column="3" SelectionChanged="sKc_keysCb_Selected" Margin="10,0,0,0" x:Name="sKc_keysCb" FontSize="16" Foreground="{DynamicResource PrimaryForegroundAccent}"  HorizontalAlignment="Stretch" Height="31"></ComboBox>
+
                         </Grid>
                     </StackPanel>
                 </Grid>

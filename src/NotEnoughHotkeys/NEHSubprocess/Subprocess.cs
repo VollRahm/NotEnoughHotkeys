@@ -52,6 +52,8 @@ namespace NEHSubprocess
         private void Subprocess_Shown(object sender, EventArgs e)
         {
             LoadProperties();
+            this.Hide();
+            this.ShowInTaskbar = false;
             pipeClient = new PipeClient(RecieverPipeName);
 
             rawInput = new RawInput(Handle, false);
@@ -102,10 +104,18 @@ namespace NEHSubprocess
                 NEHHook.StopHook();
                 Environment.Exit(1);
             }
-
             await Task.Delay(0);
         }
 
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x80;
+                return cp;
+            }
+        }
 
 
 
