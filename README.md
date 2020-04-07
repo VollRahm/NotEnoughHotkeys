@@ -1,5 +1,5 @@
 # NotEnoughHotkeys
-This is an Application to block input from a secondary keyboard and instead run custom defined Macros. Currently it is in its early shoes and barely functional. [Newest Release](https://github.com/VollRahm/NotEnoughHotkeys/releases/latest)
+This is an Application to block input from a secondary keyboard and instead run custom defined Macros. Currently it ready for daily use. [Newest Release](https://github.com/VollRahm/NotEnoughHotkeys/releases/latest)
 
 # Features
 * ✔ Distinguishing between keyboards
