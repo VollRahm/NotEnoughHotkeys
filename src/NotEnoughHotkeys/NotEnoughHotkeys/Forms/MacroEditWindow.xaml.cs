@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -39,6 +40,7 @@ namespace NotEnoughHotkeys.Forms
         {
             bool IsAdmin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
             lp_adminTBtn.IsEnabled = IsAdmin;
+            sKc_keysCb.ItemsSource = Enum.GetValues(typeof(Key)).Cast<Key>();
 
             if (Macro != null)
             {
@@ -59,6 +61,10 @@ namespace NotEnoughHotkeys.Forms
                         ShowPanel(sendKeysPanel);
                         FillSendKeysPanel();
                         break;
+                    case "Send Single Keycode":
+                        ShowPanel(sendKeycodePanel);
+                        FillSendKeycodePanel();
+                        break;
                 }
             }
             else
@@ -66,6 +72,8 @@ namespace NotEnoughHotkeys.Forms
                 ((RadioButton)RadioButtonGrid.Children[0]).IsChecked = true;
             }
         }
+
+       
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
@@ -77,12 +85,17 @@ namespace NotEnoughHotkeys.Forms
             {
                 ShowPanel(sendKeysPanel);
             }
+            else if (sendKeycodeRb.IsChecked.Value)
+            {
+                ShowPanel(sendKeycodePanel);
+            }
         }
 
         private void HidePanels()
         {
             launchProcPanel.Visibility = Visibility.Hidden;
             sendKeysPanel.Visibility = Visibility.Hidden;
+            sendKeycodePanel.Visibility = Visibility.Hidden;
         }
 
         private void ShowPanel(UIElement panel)
@@ -94,15 +107,22 @@ namespace NotEnoughHotkeys.Forms
         private void FillLaunchProcPanel()
         {
             var action = (LaunchProcessMacro)Macro.Action;
-            lp_procPathTb.Text = action.ProcessInfo.FileName;
-            lp_procArgsTb.Text = action.ProcessInfo.Arguments;
+            lp_procPathTb.Text = action.ProcessFileName;
+            lp_procArgsTb.Text = action.ProcessArgs;
             lp_adminTBtn.IsChecked = action.LaunchAsAdmin;
+            lp_procStartPathTb.Text = action.ProcessStartPath;
         }
 
         private void FillSendKeysPanel()
         {
             var action = (SendKeysMacro)Macro.Action;
-            sK_KeystokeTb.Text = action.Keystrokes;
+            sK_KeystrokeTb.Text = action.Keystrokes;
+        }
+
+        private void FillSendKeycodePanel()
+        {
+            var action = (SendKeycodeMacro)Macro.Action;
+            sKc_KeycodeTb.Text = action.KeyCode.ToString();
         }
 
         private void HotkeyTb_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -113,9 +133,20 @@ namespace NotEnoughHotkeys.Forms
 
         private void ChoosePathBtn_Click(object sender, RoutedEventArgs e)
         {
+            string InitalDir = Directory.GetCurrentDirectory();
+            try
+            {
+                DirectoryInfo directory = new DirectoryInfo(lp_procPathTb.Text);
+                if (Directory.Exists(directory.FullName))
+                    InitalDir = directory.FullName;
+                else if (File.Exists(directory.FullName))
+                    InitalDir = new FileInfo(directory.FullName).DirectoryName;
+            }
+            catch { }
+
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog
             {
-                InitialDirectory = Directory.GetCurrentDirectory(),
+                InitialDirectory = InitalDir,
                 Filter = "Executables (*.exe)|*.exe|AHK-Scripts (*.ahk)|*.ahk|All files (*.*)|*.*",
                 FilterIndex = 3,
                 Multiselect = false
@@ -125,6 +156,34 @@ namespace NotEnoughHotkeys.Forms
             {
                 lp_procPathTb.Text = ofd.FileName;
             }
+        }
+
+        private void ChooseStartPathBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string InitalDir = Directory.GetCurrentDirectory();
+            try
+            {
+                string startDir = lp_procStartPathTb.Text;
+                if (string.IsNullOrEmpty(startDir)) startDir = lp_procPathTb.Text;
+                DirectoryInfo directory = new DirectoryInfo(lp_procStartPathTb.Text);
+                if (Directory.Exists(directory.FullName))
+                    InitalDir = directory.FullName;
+                else if (File.Exists(directory.FullName))
+                    InitalDir = new FileInfo(directory.FullName).DirectoryName;
+            }
+            catch { }
+
+            Ookii.Dialogs.Wpf.VistaFolderBrowserDialog ofd = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog
+            { 
+                SelectedPath = InitalDir
+            };
+            var result = ofd.ShowDialog();
+
+            if (result.Value)
+            {
+                lp_procStartPathTb.Text = ofd.SelectedPath;
+            }
+            
         }
 
         private void DoneBtn_Click(object sender, RoutedEventArgs e)
@@ -138,17 +197,24 @@ namespace NotEnoughHotkeys.Forms
             }
             else if (sendKeysRb.IsChecked.Value)
             {
-                if (CheckForEmtpyTextbox(sK_KeystokeTb)) return;
+                if (CheckForEmtpyTextbox(sK_KeystrokeTb)) return;
+            }
+            else if (sendKeycodeRb.IsChecked.Value)
+            {
+                if (CheckForEmtpyTextbox(sKc_KeycodeTb)) return;
             }
 
             IMacroAction action = null;
             if (launchProcRb.IsChecked.Value)
             {
-                action = new LaunchProcessMacro(nameTb.Text, new ProcessStartInfo(lp_procPathTb.Text, lp_procArgsTb.Text), lp_adminTBtn.IsChecked.Value);
+                action = new LaunchProcessMacro(nameTb.Text, lp_procPathTb.Text, lp_procArgsTb.Text, lp_procStartPathTb.Text , lp_adminTBtn.IsChecked.Value);
             }
             else if (sendKeysRb.IsChecked.Value)
             {
-                action = new SendKeysMacro(nameTb.Text, sK_KeystokeTb.Text);
+                action = new SendKeysMacro(nameTb.Text, sK_KeystrokeTb.Text);
+            }else if (sendKeycodeRb.IsChecked.Value)
+            {
+                action = new SendKeycodeMacro(nameTb.Text, int.Parse(sKc_KeycodeTb.Text));
             }
             MacroItem item = new MacroItem((Key)Enum.Parse(typeof(Key), hotkeyTb.Text), action);
             
@@ -158,7 +224,7 @@ namespace NotEnoughHotkeys.Forms
             }
             else
                 Variables.Macros.Add(item);
-
+            ConfigManager.StoreObject(Variables.Macros, Constants.MacrosPath);
             this.Close();
         }
 
@@ -169,13 +235,64 @@ namespace NotEnoughHotkeys.Forms
 
         private bool CheckForEmtpyTextbox(TextBox tb)
         {
-            if (string.IsNullOrEmpty(nameTb.Text))
+            if (string.IsNullOrEmpty(tb.Text))
             {
                 tb.Focus();
                 System.Media.SystemSounds.Exclamation.Play();
                 return true;
             }
             else return false;
+        }
+
+        private void sKc_keysCb_Selected(object sender, RoutedEventArgs e)
+        {
+            sKc_KeycodeTb.Text = KeyInterop.VirtualKeyFromKey((Key)sKc_keysCb.SelectedItem).ToString();
+        }
+
+        private static readonly Regex containsLetter = new Regex("[^0-9]+");
+        private void sKc_KeycodeTb_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (containsLetter.IsMatch(e.Text))
+            {
+                e.Handled = true;
+                System.Media.SystemSounds.Exclamation.Play();
+            }
+            else
+            {
+                int newNumber = int.Parse(sKc_KeycodeTb.Text + e.Text);
+                if (newNumber > 254 || newNumber < 0)
+                {
+                    e.Handled = true;
+                    System.Media.SystemSounds.Exclamation.Play();
+                }
+            }
+        }
+
+        private void sKc_KeycodeTb_Pasting(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(typeof(String)))
+            {
+                if (containsLetter.IsMatch((String)e.DataObject.GetData(typeof(String))))
+                {
+                    e.CancelCommand();
+                    System.Media.SystemSounds.Exclamation.Play();
+                }
+                else
+                {
+                    int newNumber = int.Parse(sKc_KeycodeTb.Text + (String)e.DataObject.GetData(typeof(String)));
+                    if (newNumber > 254 || newNumber < 0)
+                    {
+                        e.Handled = true;
+                        System.Media.SystemSounds.Exclamation.Play();
+                    }
+                }
+            }
+            else
+            {
+                
+                e.CancelCommand();
+            }
+            
         }
     }
 }

@@ -32,7 +32,7 @@ namespace NotEnoughHotkeys.Misc
             cancellationToken = new CancellationTokenSource();
             
             var pipeSecurity = new PipeSecurity();
-            pipeSecurity.AddAccessRule(new PipeAccessRule(WindowsIdentity.GetCurrent().User, PipeAccessRights.FullControl, AccessControlType.Allow));
+            pipeSecurity.AddAccessRule(new PipeAccessRule(WindowsIdentity.GetCurrent().User, PipeAccessRights.ReadWrite, AccessControlType.Allow)); //needed for IPC between different elevation processes
             pipeStream = new NamedPipeServerStream(PipeName, PipeDirection.In, 1, PipeTransmissionMode.Byte, PipeOptions.Asynchronous, BufferSize, BufferSize, pipeSecurity);
         }
 

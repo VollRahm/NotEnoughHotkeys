@@ -1,0 +1,40 @@
+﻿<Window x:Class="NotEnoughHotkeys.Forms.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NotEnoughHotkeys.Forms"
+        mc:Ignorable="d"
+        Title="Settings" Height="114" Width="240" Background="{DynamicResource PrimaryBackgroundAccent}"
+        WindowStyle="None" BorderBrush="{DynamicResource SecondaryBackgroundAccent}" Loaded="ThisWindow_Loaded" Name="ThisWindow" BorderThickness="1.2" ResizeMode="NoResize" FontFamily="{DynamicResource MaterialDesignFont}" AllowsTransparency="True">
+    <Grid>
+        <Grid x:Name="TopBar" Height="25" VerticalAlignment="Top">
+            <Rectangle Fill="{DynamicResource TopBarColor}" StrokeThickness="0"></Rectangle>
+            <Label Content="{Binding ElementName=ThisWindow, Path=Title}" Foreground="{DynamicResource PrimaryHueLightForegroundBrush}"
+                   FontSize="17" FontWeight="Light" Padding="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+
+        <Grid Margin="10,35,10,0" VerticalAlignment="Stretch">
+            <Grid.Resources>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="Margin" Value="0,10,0,0"/>
+                </Style>
+            </Grid.Resources>
+
+            <StackPanel Grid.Row="0">
+                <DockPanel>
+                    <Label VerticalContentAlignment="Center" Padding="0" Content="Autostart:" FontSize="16"></Label>
+                    <ToggleButton Margin="15,0,0,0" x:Name="autostartEnabledTb" FontSize="15" HorizontalAlignment="Left" Foreground="{DynamicResource PrimaryForegroundAccent}" Checked="autostartEnabledTb_Toggled" Unchecked="autostartEnabledTb_Toggled"></ToggleButton>
+                    <CheckBox x:Name="autostartAsAdminCb" IsChecked="True" IsEnabled="False" Margin="10,0,0,0" Foreground="{DynamicResource PrimaryForegroundAccent}" VerticalContentAlignment="Center">
+                        <TextBlock TextAlignment="Center" Padding="0,0,0,2">
+                            As Admin
+                        </TextBlock>
+                    </CheckBox>
+                </DockPanel>
+            </StackPanel>
+            
+        </Grid>
+        <Button x:Name="doneBtn" Click="DoneBtn_Click" Margin="0,0,90,10" HorizontalAlignment="Right" Content="Done" VerticalAlignment="Bottom"></Button>
+        <Button x:Name="cancelBtn" Click="CancelBtn_Click" Margin="0,0,10,10" HorizontalAlignment="Right" Content="Cancel" VerticalAlignment="Bottom"></Button>
+    </Grid>
+</Window>

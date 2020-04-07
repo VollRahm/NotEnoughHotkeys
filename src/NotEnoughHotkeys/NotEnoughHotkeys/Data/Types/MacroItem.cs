@@ -10,6 +10,7 @@ namespace NotEnoughHotkeys.Data.Types
 {
     public class MacroItem
     {
+        public string Name { get; set; }
         public Key Hotkey { get; set; }
         public IMacroAction Action { get;set; }
 

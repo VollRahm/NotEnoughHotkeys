@@ -3,9 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
+using Drawing = System.Drawing;
 
 namespace NotEnoughHotkeys.Misc
 {
@@ -37,6 +40,15 @@ namespace NotEnoughHotkeys.Misc
             }
             return kb;
 
+        }
+
+        public struct NativeMethods
+        {
+            [DllImport("user32.dll")]
+            public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+
+            public const uint KEYEVENTF_EXTENDEDKEY = 0x1;
+            public const uint KEYEVENTF_KEYUP = 0x2;
         }
 
         private static string KbdLayoutFromId(string code)
@@ -376,5 +388,6 @@ namespace NotEnoughHotkeys.Misc
                     return "unknown";
             }
         }
+
     }
 }
