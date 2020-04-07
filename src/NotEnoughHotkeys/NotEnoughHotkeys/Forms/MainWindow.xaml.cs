@@ -32,6 +32,7 @@ namespace NotEnoughHotkeys.Forms
         private NEHSubprocess AdminSubprocess;
 
         private TrayIcon trayIcon;
+        private SettingsWindow settingsWindow = new SettingsWindow();
 
         public MainWindow()
         {
@@ -45,7 +46,6 @@ namespace NotEnoughHotkeys.Forms
         private void ThisMainWindow_ContentRendered(object sender, EventArgs e)
         {
             macrosItemList.ItemsSource = Variables.Macros;
-             
             
             if (!IsStartedAsAdmin)
             {
@@ -63,6 +63,7 @@ namespace NotEnoughHotkeys.Forms
             rawInput = new RawInput(Handle, false);
             rawInput.KeyPressed += new RawKeyboard.DeviceEventHandler(RawInputHandler);
             trayIcon = new TrayIcon(this);
+            settingsWindow = new SettingsWindow();
         }
 
         private async void RawInputHandler(object sender, RawInputEventArg e)
@@ -154,6 +155,8 @@ namespace NotEnoughHotkeys.Forms
         {
             if (UserSubprocess != null) await UserSubprocess.StopProcess();
             if (AdminSubprocess != null) await AdminSubprocess.StopProcess();
+            AdminSubprocess = null;
+            UserSubprocess = null;
             this.Close();
             Environment.Exit(0);
         }
@@ -235,6 +238,20 @@ namespace NotEnoughHotkeys.Forms
             }
             UserSubprocess.KeyEventRecieved += new NEHSubprocess.KeyEventRecievedHandler(KeyPressRecieved);
             await UserSubprocess.StartProcess();
+        }
+
+        private void settingsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            settingsWindow.Show();
+        }
+
+        private void ThisMainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Environment.GetCommandLineArgs().Contains("--minimized"))
+            {
+                this.Hide();
+                this.ShowInTaskbar = true;
+            }
         }
     }
 }

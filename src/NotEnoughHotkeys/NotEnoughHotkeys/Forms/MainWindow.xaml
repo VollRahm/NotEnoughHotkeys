@@ -8,7 +8,7 @@
         xmlns:types="clr-namespace:NotEnoughHotkeys.Data.Types"
         mc:Ignorable="d"
         Title="NotEnoughHotkeys" Height="648.347" Width="586.17" Background="{DynamicResource PrimaryBackgroundAccent}"
-        WindowStyle="None" Closing="ThisMainWindow_Closing" ContentRendered="ThisMainWindow_ContentRendered" BorderBrush="{DynamicResource SecondaryBackgroundAccent}" BorderThickness="1.2" Name="ThisMainWindow" ResizeMode="NoResize" FontFamily="{DynamicResource MaterialDesignFont}" AllowsTransparency="True">
+        WindowStyle="None" Closing="ThisMainWindow_Closing" ContentRendered="ThisMainWindow_ContentRendered" BorderBrush="{DynamicResource SecondaryBackgroundAccent}" BorderThickness="1.2" Name="ThisMainWindow" ResizeMode="NoResize" FontFamily="{DynamicResource MaterialDesignFont}" AllowsTransparency="True" Loaded="ThisMainWindow_Loaded">
     <Grid>
         <Grid x:Name="TopBar" Height="25" VerticalAlignment="Top">
             <Rectangle Fill="{DynamicResource TopBarColor}" StrokeThickness="0"></Rectangle>
@@ -120,7 +120,9 @@
                 
                 <Button x:Name="quitAppBtn" Content="Quit" Margin="0,0,150,0" 
                         HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="QuitAppBtn_Click"/>
-
+                
+                <Button x:Name="settingsBtn" Content="Settings" Margin="0,0,220,0" 
+                        HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="settingsBtn_Click"/>
 
 
             </Grid>

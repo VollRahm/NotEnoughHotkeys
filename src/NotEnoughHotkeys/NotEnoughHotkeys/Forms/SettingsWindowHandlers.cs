@@ -1,21 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
 namespace NotEnoughHotkeys.Forms
 {
-    public static class MainWindowHandlers
+    public static class SettingsWindowHandlers
     {
-        private static MainWindow w;
+        private static SettingsWindow w;
 
-        public static void Init(MainWindow _w)
+        public static void Init(SettingsWindow _w)
         {
-            if (Environment.GetCommandLineArgs().Contains("--minimized"))
-            {
-                _w.ShowInTaskbar = false;
-                _w.WindowState = WindowState.Minimized;
-            }
             w = _w;
             w.MouseLeftButtonDown += new MouseButtonEventHandler(DragMoveHandler);
         }

@@ -60,25 +60,4 @@ namespace NotEnoughHotkeys.Data
             Constants.MacrosPath = Path.Combine(basePath, "macros.json");
         }
     }
-    public class SerializableContractResolver : DefaultContractResolver
-    {
-        protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
-        {
-            var properties = base.CreateProperties(type, memberSerialization);
-
-            foreach (var p in properties)
-                p.Ignored = false;
-
-            return properties;
-        }
-
-        protected override JsonContract CreateContract(Type objectType)
-        {
-            var contract = base.CreateContract(objectType);
-
-            if (contract is JsonStringContract)
-                return CreateObjectContract(objectType);
-            return contract;
-        }
-    }
 }

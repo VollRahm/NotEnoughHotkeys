@@ -36,6 +36,10 @@ namespace NotEnoughHotkeys.Data.Types.Actions
             var desiredPath = ProcessStartPath;
             try
             {
+                if (string.IsNullOrEmpty(desiredPath))
+                {
+                    desiredPath = ProcessFileName;
+                }
                 DirectoryInfo directory = new DirectoryInfo(desiredPath);
                 if (Directory.Exists(directory.FullName))
                     ProcessStartPath = directory.FullName;
