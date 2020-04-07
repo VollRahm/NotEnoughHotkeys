@@ -2,7 +2,7 @@
 This is an Application to block input from a secondary keyboard and instead run custom defined Macros. Currently it is in its early shoes and barely functional. [Newest Release](https://github.com/VollRahm/NotEnoughHotkeys/releases/latest)
 
 # Features
-* ✔ Distinguishing bewteewn keyboards
+* ✔ Distinguishing between keyboards
 * ✔ Blocking input from certain keyboard
 * ✔ GUI for creating custom macros to run apps or send other keystrokes
 * ✔ Admin process support 
