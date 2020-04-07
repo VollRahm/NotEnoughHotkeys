@@ -5,12 +5,12 @@ This is an Application to block input from a secondary keyboard and instead run 
 * ✔ Distinguishing between keyboards
 * ✔ Blocking input from certain keyboard
 * ✔ GUI for creating custom macros to run apps or send other keystrokes
-* ✔ Admin process support  
+* ✔ Admin process support
+* ✔ Enabling and disabling the hook (yes, this is still not implemented)
+* ✔ Saving macros  
 </br>
 
 * ➕ Creating macros for more than one extra keyboard
-* ➕ Saving macros
-* ➕ Enabling and disabling the hook (yes, this is still not implemented)
 * ➕ Support for modifier keys (Ctrl, Shift, Alt)
 * ➕ Support for double taps
 * ➕ Maybe your ideas! Submit them as issues with the idea tag!  
