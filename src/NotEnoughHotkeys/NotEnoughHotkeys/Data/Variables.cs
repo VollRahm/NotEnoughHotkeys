@@ -10,7 +10,8 @@ namespace NotEnoughHotkeys.Data
 {
     public static class Variables
     {
-        public static Keyboard TargetKeyboard = new Keyboard() { HWID = "" }; //because of nullpointerexception
+        public static Config Config = new Config();
         public static ObservableCollection<MacroItem> Macros = new ObservableCollection<MacroItem>();
+        public static bool FirstEverStartup = false;
     }
 }

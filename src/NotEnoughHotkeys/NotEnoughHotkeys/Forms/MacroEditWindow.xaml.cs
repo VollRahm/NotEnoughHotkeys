@@ -107,10 +107,10 @@ namespace NotEnoughHotkeys.Forms
         private void FillLaunchProcPanel()
         {
             var action = (LaunchProcessMacro)Macro.Action;
-            lp_procPathTb.Text = action.ProcessInfo.FileName;
-            lp_procArgsTb.Text = action.ProcessInfo.Arguments;
+            lp_procPathTb.Text = action.ProcessFileName;
+            lp_procArgsTb.Text = action.ProcessArgs;
             lp_adminTBtn.IsChecked = action.LaunchAsAdmin;
-            lp_procStartPathTb.Text = action.ProcessInfo.WorkingDirectory;
+            lp_procStartPathTb.Text = action.ProcessStartPath;
         }
 
         private void FillSendKeysPanel()
@@ -207,7 +207,7 @@ namespace NotEnoughHotkeys.Forms
             IMacroAction action = null;
             if (launchProcRb.IsChecked.Value)
             {
-                action = new LaunchProcessMacro(nameTb.Text, new ProcessStartInfo(lp_procPathTb.Text, lp_procArgsTb.Text) { WorkingDirectory = lp_procStartPathTb.Text }, lp_adminTBtn.IsChecked.Value);
+                action = new LaunchProcessMacro(nameTb.Text, lp_procPathTb.Text, lp_procArgsTb.Text, lp_procStartPathTb.Text , lp_adminTBtn.IsChecked.Value);
             }
             else if (sendKeysRb.IsChecked.Value)
             {
@@ -224,7 +224,7 @@ namespace NotEnoughHotkeys.Forms
             }
             else
                 Variables.Macros.Add(item);
-
+            ConfigManager.StoreObject(Variables.Macros, Constants.MacrosPath);
             this.Close();
         }
 

@@ -8,7 +8,7 @@
         xmlns:types="clr-namespace:NotEnoughHotkeys.Data.Types"
         mc:Ignorable="d"
         Title="NotEnoughHotkeys" Height="648.347" Width="586.17" Background="{DynamicResource PrimaryBackgroundAccent}"
-        WindowStyle="None" ContentRendered="ThisMainWindow_ContentRendered" BorderBrush="{DynamicResource SecondaryBackgroundAccent}" BorderThickness="1.2" Name="ThisMainWindow" ResizeMode="NoResize" FontFamily="{DynamicResource MaterialDesignFont}" AllowsTransparency="True">
+        WindowStyle="None" Closing="ThisMainWindow_Closing" ContentRendered="ThisMainWindow_ContentRendered" BorderBrush="{DynamicResource SecondaryBackgroundAccent}" BorderThickness="1.2" Name="ThisMainWindow" ResizeMode="NoResize" FontFamily="{DynamicResource MaterialDesignFont}" AllowsTransparency="True">
     <Grid>
         <Grid x:Name="TopBar" Height="25" VerticalAlignment="Top">
             <Rectangle Fill="{DynamicResource TopBarColor}" StrokeThickness="0"></Rectangle>

@@ -1,6 +1,8 @@
-﻿using NotEnoughHotkeys.SubprocessAPI;
+﻿using Newtonsoft.Json;
+using NotEnoughHotkeys.SubprocessAPI;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -15,24 +17,30 @@ namespace NotEnoughHotkeys.Data.Types.Actions
     {
         public string Name { get; set; }
         public string TypeName { get => "Launch Process"; }
+        
+        [JsonIgnore]
         public ProcessStartInfo ProcessInfo { get; set; }
+        public string ProcessFileName { get; set; }
+        public string ProcessArgs { get; set; }
+        public string ProcessStartPath { get; set; }
         public bool LaunchAsAdmin { get; set; }
         
 
-        public LaunchProcessMacro(string name, ProcessStartInfo proc, bool asAdmin)
+        public LaunchProcessMacro(string name, string procPath, string procArgs, string procStartPath, bool asAdmin)
         {
             Name = name;
-            ProcessInfo = proc;
-            ProcessInfo.UseShellExecute = true;
+            ProcessFileName = procPath;
+            ProcessArgs = procArgs;
+            ProcessStartPath = procStartPath;
 
-            var desiredPath = ProcessInfo.WorkingDirectory;
+            var desiredPath = ProcessStartPath;
             try
             {
                 DirectoryInfo directory = new DirectoryInfo(desiredPath);
                 if (Directory.Exists(directory.FullName))
-                    ProcessInfo.WorkingDirectory = directory.FullName;
+                    ProcessStartPath = directory.FullName;
                 else if (File.Exists(directory.FullName))
-                    ProcessInfo.WorkingDirectory = new FileInfo(directory.FullName).DirectoryName;
+                    ProcessStartPath = new FileInfo(directory.FullName).DirectoryName;
             }
             catch { }
 
@@ -41,6 +49,8 @@ namespace NotEnoughHotkeys.Data.Types.Actions
 
         public async Task PerformAsync()
         {
+            ProcessInfo = new ProcessStartInfo(ProcessFileName, ProcessArgs) { WorkingDirectory = ProcessStartPath };
+            ProcessInfo.UseShellExecute = true;
             try
             {
                 bool IsAdmin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);

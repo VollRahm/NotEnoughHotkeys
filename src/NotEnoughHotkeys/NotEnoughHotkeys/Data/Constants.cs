@@ -14,5 +14,8 @@ namespace NotEnoughHotkeys.Data
 
         public const string KEYDOWN = "MAKE";
         public const string KEYUP = "BREAK";
+
+        public static string ConfigPath;
+        public static string MacrosPath;
     }
 }
