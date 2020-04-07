@@ -20,9 +20,6 @@ using static NotEnoughHotkeys.Data.Constants;
 
 namespace NotEnoughHotkeys.Forms
 {
-    /// <summary>
-    /// Interaktionslogik für MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private bool IsSettingKeyboard = false;
@@ -33,6 +30,7 @@ namespace NotEnoughHotkeys.Forms
         private NEHSubprocess UserSubprocess;
         private NEHSubprocess AdminSubprocess;
 
+        private TrayIcon trayIcon;
 
         public MainWindow()
         {
@@ -60,9 +58,10 @@ namespace NotEnoughHotkeys.Forms
             var Handle = new WindowInteropHelper(this).Handle;
             rawInput = new RawInput(Handle, false);
             rawInput.KeyPressed += new RawKeyboard.DeviceEventHandler(RawInputHandler);
+            trayIcon = new TrayIcon(this);
         }
 
-        private void RawInputHandler(object sender, RawInputEventArg e)
+        private async void RawInputHandler(object sender, RawInputEventArg e)
         {
             if (IsSettingKeyboard && e.KeyPressEvent.KeyPressState == KEYUP)
             {
@@ -77,7 +76,8 @@ namespace NotEnoughHotkeys.Forms
                 currentKeyboardLbl.Foreground = Helper.GetFromResources<SolidColorBrush>("PrimaryForegroundAccent");
                 kbdInfoBtn.IsEnabled = true;
                 IsSettingKeyboard = false;
-                
+
+                await NEHSubprocess.KillAllProcesses();
                 UserSubprocess = new NEHSubprocess(false, kbd.HWID, PIPENAME);
                 if (IsStartedAsAdmin)
                 {
@@ -152,12 +152,50 @@ namespace NotEnoughHotkeys.Forms
             mew.Show();
         }
 
-        private async void QuitAppBtn_Click(object sender, RoutedEventArgs e)
+        public async void QuitAppBtn_Click(object sender, RoutedEventArgs e)
         {
             if (UserSubprocess != null) await UserSubprocess.StopProcess();
             if (AdminSubprocess != null) await AdminSubprocess.StopProcess();
             this.Close();
             Environment.Exit(0);
+        }
+
+        private void hideWindowBtn_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+            this.Hide();
+            //TODO: Add config to check if its first startup
+
+        }
+
+        private async void EnabledCb_Toggled(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                trayIcon.IsHookEnabled = EnabledCb.IsChecked.Value;
+                if (EnabledCb.IsChecked.Value)
+                {
+                    if (string.IsNullOrEmpty(Variables.TargetKeyboard.HWID)) return;
+                    await NEHSubprocess.KillAllProcesses();
+                    UserSubprocess = new NEHSubprocess(false, Variables.TargetKeyboard.HWID, PIPENAME);
+                    if (IsStartedAsAdmin)
+                    {
+                        AdminSubprocess = new NEHSubprocess(true, Variables.TargetKeyboard.HWID, PIPENAME_ADMIN);
+                        AdminSubprocess.KeyEventRecieved += new NEHSubprocess.KeyEventRecievedHandler(KeyPressRecieved);
+                        _ = AdminSubprocess.StartProcess();
+                    }
+                    UserSubprocess.KeyEventRecieved += new NEHSubprocess.KeyEventRecievedHandler(KeyPressRecieved);
+                    _ = UserSubprocess.StartProcess();
+                }
+                else
+                {
+                    if (UserSubprocess != null) await UserSubprocess.StopProcess();
+                    if (AdminSubprocess != null) await AdminSubprocess.StopProcess();
+                    UserSubprocess = null;
+                    AdminSubprocess = null;
+                }
+            }
+            catch { }
         }
     }
 }

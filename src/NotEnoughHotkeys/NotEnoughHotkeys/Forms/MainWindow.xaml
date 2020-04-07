@@ -108,10 +108,17 @@
                                 Width="24" />
                 </Button>
 
-                <Button x:Name="hideWindowBtn" Content="Hide" Margin="0,0,0,0" 
-                        HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                <CheckBox x:Name="EnabledCb" Content="Enabled" Foreground="{DynamicResource PrimaryForegroundAccent}" HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                          IsChecked="True"  Checked="EnabledCb_Toggled" Unchecked="EnabledCb_Toggled">
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.2" ScaleY="1.2" />
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
                 
-                <Button x:Name="quitAppBtn" Content="Quit" Margin="0,0,70,0" 
+                <Button x:Name="hideWindowBtn" Content="Minimize to Tray" Margin="0,0,0,0" 
+                        HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="hideWindowBtn_Click"/>
+                
+                <Button x:Name="quitAppBtn" Content="Quit" Margin="0,0,150,0" 
                         HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="QuitAppBtn_Click"/>
 
 

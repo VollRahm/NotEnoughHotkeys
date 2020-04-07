@@ -114,6 +114,7 @@
       <DependentUpon>MacroEditWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\MacroEditWindowHandlers.cs" />
+    <Compile Include="Misc\TrayIcon.cs" />
     <Compile Include="SubprocessAPI\ProcessLauncher.cs" />
     <Compile Include="Misc\Helper.cs" />
     <Compile Include="Misc\PipeServer.cs" />

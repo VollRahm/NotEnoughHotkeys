@@ -72,6 +72,13 @@ namespace NotEnoughHotkeys.SubprocessAPI
             else
                 Process.GetProcessesByName(ExecutablePath.Split('\\').Last().Remove(ExecutablePath.Split('\\').Last().Length - 4)).ToList().ForEach(x => x.Kill());
         }
+
+        public static async Task KillAllProcesses()
+        {
+            Process.GetProcessesByName(ExecutablePathAdmin.Split('\\').Last().Remove(ExecutablePathAdmin.Split('\\').Last().Length - 4)).ToList().ForEach(x => x.Kill());
+            Process.GetProcessesByName(ExecutablePath.Split('\\').Last().Remove(ExecutablePath.Split('\\').Last().Length - 4)).ToList().ForEach(x => x.Kill());
+            await Task.Delay(0);
+        }
     }
 
     public class NEHKeyPressEventArgs : EventArgs
