@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -38,9 +39,11 @@ namespace NotEnoughHotkeys.Forms
         {
             InitializeComponent();
             MainWindowHandlers.Init(this);
+
             IsStartedAsAdmin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
             ConfigManager.InitPaths();
             LoadConfigs();
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
         }
 
         private void ThisMainWindow_ContentRendered(object sender, EventArgs e)

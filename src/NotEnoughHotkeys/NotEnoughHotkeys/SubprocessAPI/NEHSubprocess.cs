@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -17,8 +18,9 @@ namespace NotEnoughHotkeys.SubprocessAPI
 
         public event EventHandler ProcessEnded;
 
-        private const string ExecutablePath = "bin\\NEHSubprocess.exe";
-        private const string ExecutablePathAdmin = "bin\\NEHSubprocessAdmin.exe";
+        private static string BasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\";
+        private static string ExecutablePath =  Path.Combine(BasePath + "bin\\NEHSubprocess.exe");
+        private static string ExecutablePathAdmin = Path.Combine(BasePath + "bin\\NEHSubprocessAdmin.exe");
         private ProcessStartInfo psi;
         private bool IsAdmin = false;
         private string KeyboardToBlock;
@@ -53,7 +55,7 @@ namespace NotEnoughHotkeys.SubprocessAPI
         public async Task StartProcess()
         {
             if (!IsAdmin)
-                ProcessLauncher.ExecuteProcessUnElevated(ExecutablePath, KeyboardToBlock, Directory.GetCurrentDirectory());
+                ProcessLauncher.ExecuteProcessUnElevated(ExecutablePath, KeyboardToBlock, BasePath);
             else
             {
                 psi = new ProcessStartInfo(ExecutablePathAdmin, KeyboardToBlock);
