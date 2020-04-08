@@ -6,7 +6,7 @@ This is an Application to block input from a secondary keyboard and instead run 
 * ✔ Blocking input from certain keyboard
 * ✔ GUI for creating custom macros to run apps or send other keystrokes
 * ✔ Admin process support
-* ✔ Enabling and disabling the hook (yes, this is still not implemented)
+* ✔ Enabling and disabling the hook
 * ✔ Saving macros  
 </br>
 
