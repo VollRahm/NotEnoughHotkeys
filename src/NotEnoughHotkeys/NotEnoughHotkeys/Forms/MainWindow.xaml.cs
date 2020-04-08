@@ -1,17 +1,14 @@
 ﻿using NotEnoughHotkeys.Data;
 using NotEnoughHotkeys.Data.Types;
-using NotEnoughHotkeys.Data.Types.Actions;
 using NotEnoughHotkeys.Misc;
 using NotEnoughHotkeys.SubprocessAPI;
 using RawInput_dll;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
@@ -55,7 +52,7 @@ namespace NotEnoughHotkeys.Forms
                 var result = MessageBox.Show("Note: NotEnoughHotkeys was started without Admin permissions. It will only work partially and won't work inside processes with admin privileges. Do you want to restart as Admin? ", "Disclaimer", MessageBoxButton.YesNo, MessageBoxImage.Information);
                 if(result == MessageBoxResult.Yes)
                 {
-                    ProcessStartInfo psi = new ProcessStartInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                    ProcessStartInfo psi = new ProcessStartInfo(Assembly.GetExecutingAssembly().Location);
                     psi.UseShellExecute = true;
                     psi.Verb = "runas";
                     Process.Start(psi);
