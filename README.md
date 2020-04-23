@@ -34,4 +34,5 @@ Icon made by [Freepik](https://www.flaticon.com/authors/freepik) from www.flatic
 Icon composition made by [networkException](https://github.com/networkException), thanx for that
 
 Good article on the topic: https://www.codeproject.com/Articles/716591/Combining-Raw-Input-and-keyboard-Hook-to-selective </br>
-Raw Input Library: https://www.codeproject.com/Articles/17123/Using-Raw-Input-from-C-to-handle-multiple-keyboard
+More references:  
+https://www.codeproject.com/Articles/17123/Using-Raw-Input-from-C-to-handle-multiple-keyboard
