@@ -1,8 +1,8 @@
 ﻿using NotEnoughHotkeys.Data;
 using NotEnoughHotkeys.Data.Types;
 using NotEnoughHotkeys.Misc;
+using NotEnoughHotkeys.RawInputLib;
 using NotEnoughHotkeys.SubprocessAPI;
-using RawInput_dll;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -60,24 +60,27 @@ namespace NotEnoughHotkeys.Forms
                 }
             }
             var Handle = new WindowInteropHelper(this).Handle;
-            rawInput = new RawInput(Handle, false);
-            rawInput.KeyPressed += new RawKeyboard.DeviceEventHandler(RawInputHandler);
+            rawInput = new RawInput();
+            rawInput.RawKeyPressEvent += new RawInput.RawInputHandler(RawInputHandler);
+            rawInput.Start();
             trayIcon = new TrayIcon(this);
             settingsWindow = new SettingsWindow();
         }
 
-        private async void RawInputHandler(object sender, RawInputEventArg e)
+        private async void RawInputHandler(object sender, RawKeyPressEventArgs e)
         {
-            if (IsSettingKeyboard && e.KeyPressEvent.KeyPressState == KEYUP)
+            if (IsSettingKeyboard && e.KeyState == KeyPressState.Up)
             {
-                Data.Types.Keyboard kbd = Helper.GetKeyboardInfo(e.KeyPressEvent.DeviceName);
-                kbd.HWID = e.KeyPressEvent.DeviceName;
-                kbd.Name = e.KeyPressEvent.Name;
+                Data.Types.Keyboard kbd = new Data.Types.Keyboard();
+                kbd.Description = e.Keyboard.Description;
+                kbd.HWID = e.Keyboard.HWID;
+                kbd.Name = e.Keyboard.Name;
+                kbd.Layout = e.Keyboard.KeyboardLayout;
                 Variables.Config.TargetKeyboard = kbd;
 
                 selectKeyboardBtn.Content = "Select";
                 selectKeyboardBtn.IsHitTestVisible = true; //enable button click handler
-                currentKeyboardLbl.Content = "Keyboard: " + e.KeyPressEvent.Name;
+                currentKeyboardLbl.Content = "Keyboard: " + e.Keyboard.Name;
                 currentKeyboardLbl.Foreground = Helper.GetFromResources<SolidColorBrush>("PrimaryForegroundAccent");
                 kbdInfoBtn.IsEnabled = true;
                 IsSettingKeyboard = false;

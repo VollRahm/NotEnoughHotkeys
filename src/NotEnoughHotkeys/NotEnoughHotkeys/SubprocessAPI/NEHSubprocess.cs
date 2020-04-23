@@ -43,7 +43,7 @@ namespace NotEnoughHotkeys.SubprocessAPI
         private void PipeMessageRecieved(string Reply)
         {
             var command = Reply.Split(' ');
-            NEHKeyState state = command[0] == "MAKE" ? NEHKeyState.KeyDown : NEHKeyState.KeyUp;
+            NEHKeyState state = command[0] == "0" ? NEHKeyState.KeyDown : NEHKeyState.KeyUp;
             int KeyCode = int.Parse(command[1]);
             Key key = KeyInterop.KeyFromVirtualKey(KeyCode);
             NEHKeyPressEventArgs eventArgs = new NEHKeyPressEventArgs(state, key, KeyCode);

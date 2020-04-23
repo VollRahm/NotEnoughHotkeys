@@ -1,25 +1,14 @@
-﻿using NotEnoughHotkeys.Data.Types;
+﻿using Microsoft.Win32;
 using System;
 using System.Management;
-using System.Runtime.InteropServices;
-using System.Windows;
 
-namespace NotEnoughHotkeys.Misc
+namespace NotEnoughHotkeys.RawInputLib
 {
-    public static class Helper
+    public static class RawInputHelper
     {
-        public static T GetFromResources<T>(string key)
+        public static Tuple<string,string> GetKeyboardInfo(string hwid)
         {
-            return (T)Application.Current.TryFindResource(key);
-        }
-
-        public struct NativeMethods
-        {
-            [DllImport("user32.dll")]
-            public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
-
-            public const uint KEYEVENTF_EXTENDEDKEY = 0x1;
-            public const uint KEYEVENTF_KEYUP = 0x2;
+            return new Tuple<string, string>("", "");
         }
 
         private static string KbdLayoutFromId(string code)
@@ -360,5 +349,19 @@ namespace NotEnoughHotkeys.Misc
             }
         }
 
+        public static string GetDeviceName(string hwid)
+        {
+            try
+            {
+                var split = hwid.Substring(4).Split('#');
+                RegistryKey reg = Registry.LocalMachine.OpenSubKey($"System\\CurrentControlSet\\Enum\\{split[0]}\\{split[1]}\\{split[2]}");
+                var desc = reg.GetValue("DeviceDesc").ToString();
+                return desc.Substring(desc.IndexOf(';')+1);
+            }
+            catch
+            {
+                return "";
+            }
+        }
     }
 }
