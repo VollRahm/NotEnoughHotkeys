@@ -44,7 +44,6 @@ namespace NotEnoughHotkeys.RawInputLib
                     Handle = IntPtr.Zero,
                     HWID = "NULL",
                     Id = currentKeyboard,
-                    KeyboardLayout = "NONE",
                     Name = "Not identified keypress",
                     Type = RawInputDeviceType.KEYBOARD
                 };
@@ -71,15 +70,12 @@ namespace NotEnoughHotkeys.RawInputLib
                             GetRawInputDeviceInfo(device.hDevice, (uint)RawInputDeviceInfo.DeviceName, data, ref size);
 
                             var HWID = Marshal.PtrToStringAnsi(data);
-                            var kbdInfo = RawInputHelper.GetKeyboardInfo(HWID);
 
                             RawDevice rawDevice = new RawDevice()
                             {
                                 HWID = HWID,
                                 Handle = device.hDevice,
-                                Description = kbdInfo.Item1,
                                 Id = currentKeyboard,
-                                KeyboardLayout = kbdInfo.Item2,
                                 Type = device.Type,
                                 Name = RawInputHelper.GetDeviceName(HWID)
                             };

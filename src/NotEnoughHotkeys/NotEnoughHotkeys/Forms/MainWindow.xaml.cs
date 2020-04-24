@@ -72,12 +72,13 @@ namespace NotEnoughHotkeys.Forms
             if (IsSettingKeyboard && e.KeyState == KeyPressState.Up)
             {
                 Data.Types.Keyboard kbd = new Data.Types.Keyboard();
-                kbd.Description = e.Keyboard.Description;
+                var kbdInfo = Helper.GetKeyboardInfo(e.Keyboard.HWID);
+                kbd.Description = kbdInfo.Item1;
                 kbd.HWID = e.Keyboard.HWID;
                 kbd.Name = e.Keyboard.Name;
-                kbd.Layout = e.Keyboard.KeyboardLayout;
+                kbd.Layout = kbdInfo.Item2;
                 Variables.Config.TargetKeyboard = kbd;
-
+                
                 selectKeyboardBtn.Content = "Select";
                 selectKeyboardBtn.IsHitTestVisible = true; //enable button click handler
                 currentKeyboardLbl.Content = "Keyboard: " + e.Keyboard.Name;

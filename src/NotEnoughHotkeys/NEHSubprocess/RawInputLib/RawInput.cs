@@ -1,5 +1,4 @@
-﻿using NotEnoughHotkeys.RawInputLib;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using static NotEnoughHotkeys.RawInputLib.Native;

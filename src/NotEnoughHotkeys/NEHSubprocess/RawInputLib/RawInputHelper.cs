@@ -6,11 +6,6 @@ namespace NotEnoughHotkeys.RawInputLib
 {
     public static class RawInputHelper
     {
-        public static Tuple<string,string> GetKeyboardInfo(string hwid)
-        {
-            return new Tuple<string, string>("", "");
-        }
-
         private static string KbdLayoutFromId(string code)
         {
             switch (code)

@@ -6,27 +6,6 @@ namespace NotEnoughHotkeys.RawInputLib
 {
     public static class RawInputHelper
     {
-        public static Tuple<string,string> GetKeyboardInfo(string hwid)
-        {
-            Tuple<string, string> result = new Tuple<string, string>("","");
-            ManagementObjectSearcher win32Monitor = new ManagementObjectSearcher("select * from Win32_Keyboard");
-            hwid = hwid.Replace("#", "\\");
-
-
-            foreach (ManagementObject obj in win32Monitor.Get())
-            {
-                string chwid = ((string)obj["DeviceID"]);
-                chwid = chwid.Remove(chwid.LastIndexOf("\\"));
-                chwid = chwid.Remove(chwid.LastIndexOf("\\"));
-
-                if (hwid.Contains(chwid))
-                {
-                    result = new Tuple<string,string>((string)obj["Description"], KbdLayoutFromId((string)obj["Layout"]));
-                }
-            }
-            return result;
-        }
-
         private static string KbdLayoutFromId(string code)
         {
             switch (code)
