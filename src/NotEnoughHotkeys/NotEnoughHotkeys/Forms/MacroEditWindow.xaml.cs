@@ -237,6 +237,7 @@ namespace NotEnoughHotkeys.Forms
 
         private void sKc_keysCb_Selected(object sender, RoutedEventArgs e)
         {
+            if(!sKc_KeycodeTb.IsFocused)
             sKc_KeycodeTb.Text = KeyInterop.VirtualKeyFromKey((Key)sKc_keysCb.SelectedItem).ToString();
         }
 
