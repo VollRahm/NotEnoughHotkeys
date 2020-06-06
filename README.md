@@ -29,6 +29,12 @@ Here are the steps to build the project:
 5. Build the `NEH_KbdHook` Project and place the Dll files twice into the `bin` folder, one as `NEHKbdhook.dll` and the other as `NEHKbdhookAdmin.dll`
 You can check the [newest release](https://github.com/VollRahm/NotEnoughHotkeys/releases/latest) to see the folder structure.
 
+## Known Issues
+- Keystrokes in Windows Explorer and the Search bar are not blocked, because they hook the keyboard on a lower level.
+- Applications that use Global-Keyboard-Hooks for their Hotkeys still get input. The workaround is to assign Keys like F24 to your hotkey and then send F24 over NotEnoughHotkeys
+- Windows Key, Alt+Tab and State Keys (Caps Lock, Num Lock) cannot be blocked.
+- Games hook the keyboard on a lower level, so the keys won't be blocked in games.
+
 ### Some notes
 Icon made by [Freepik](https://www.flaticon.com/authors/freepik) from www.flaticon.com </br>
 Icon composition made by [networkException](https://github.com/networkException), thanx for that
