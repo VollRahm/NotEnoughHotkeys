@@ -124,6 +124,7 @@
                             <Label Grid.Column="0" VerticalContentAlignment="Center" Padding="0" Content="Keystrokes: " FontSize="17"></Label>
                             <TextBox Grid.Column="1" materialDesign:HintAssist.HelperText="Example: Hello World {ENTER}" Margin="10,0,0,0" x:Name="sK_KeystrokeTb" FontSize="16" Foreground="{DynamicResource PrimaryForegroundAccent}"  HorizontalAlignment="Stretch"></TextBox>
                         </Grid>
+                        <Button x:Name="sendKeystrokeBtn" Click="sendKeystrokeBtn_Click" Margin="0,30,0,0" HorizontalAlignment="Center" Content="Send this Keystrokes now"></Button>
                     </StackPanel>
 
                     <StackPanel Margin="10,0,10,0" Visibility="Visible" x:Name="sendKeycodePanel">
@@ -139,8 +140,8 @@
                             <TextBox Grid.Column="1" PreviewTextInput="sKc_KeycodeTb_PreviewTextInput" DataObject.Pasting="sKc_KeycodeTb_Pasting" materialDesign:HintAssist.HelperText="From 0 - 254" Margin="10,0,0,0" x:Name="sKc_KeycodeTb" FontSize="16" Foreground="{DynamicResource PrimaryForegroundAccent}"  HorizontalAlignment="Stretch"></TextBox>
                             <Label Grid.Column="2"  VerticalContentAlignment="Center" Padding="0" Content="or" FontSize="17" HorizontalAlignment="Center" Margin="23,0,24,0" Width="16"></Label>
                             <ComboBox Grid.Column="3" SelectionChanged="sKc_keysCb_Selected" Margin="10,0,0,0" x:Name="sKc_keysCb" FontSize="16" Foreground="{DynamicResource PrimaryForegroundAccent}"  HorizontalAlignment="Stretch" Height="31"></ComboBox>
-
                         </Grid>
+                        <Button x:Name="sendKeycodeBtn" Click="sendKeycodeBtn_Click" Margin="0,30,0,0" HorizontalAlignment="Center" Content="Send this Key now"></Button>
                     </StackPanel>
                 </Grid>
             </Border>

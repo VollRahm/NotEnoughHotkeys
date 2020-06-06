@@ -6,9 +6,11 @@ using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using static NotEnoughHotkeys.Misc.Helper;
 
 namespace NotEnoughHotkeys.Forms
 {
@@ -281,10 +283,40 @@ namespace NotEnoughHotkeys.Forms
             }
             else
             {
-                
                 e.CancelCommand();
             }
-            
+        }
+
+        private async void sendKeycodeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            await SendKeyTimer((Button)sender, 5);
+            try
+            {
+                byte KeyCode = (byte)int.Parse(sKc_KeycodeTb.Text);
+                NativeMethods.keybd_event(KeyCode, 0, NativeMethods.KEYEVENTF_EXTENDEDKEY, new UIntPtr(0));
+                await Task.Delay(10);
+                NativeMethods.keybd_event(KeyCode, 0, NativeMethods.KEYEVENTF_KEYUP, new UIntPtr(0));
+            }
+            catch { }
+        }
+
+        private async void sendKeystrokeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            await SendKeyTimer((Button)sender, 5);
+            System.Windows.Forms.SendKeys.SendWait(sK_KeystrokeTb.Text);
+        }
+
+        private async Task SendKeyTimer(Button btn, int seconds)
+        {
+            var btnText = btn.Content;
+            btn.IsEnabled = false;
+            for (int i = seconds; i > 0; i--)
+            {
+                await this.Dispatcher.InvokeAsync(() => btn.Content = i.ToString() + "...");
+                await Task.Delay(1000);
+            }
+            btn.IsEnabled = true;
+            this.Dispatcher.Invoke(() => btn.Content = btnText);
         }
     }
 }
