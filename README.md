@@ -2,23 +2,23 @@
 This is an Application to block input from a secondary keyboard and instead run custom defined Macros. Currently its ready for daily use. Its an alternative to LuaMacros. [Newest Release](https://github.com/VollRahm/NotEnoughHotkeys/releases/latest)
 
 # Features
-* ✔ Distinguishing between keyboards
-* ✔ Blocking input from certain keyboard
-* ✔ GUI for creating custom macros to run apps or send other keystrokes
-* ✔ Admin process support
-* ✔ Enabling and disabling the hook
-* ✔ Saving macros  
+* ✔ &ensp; Distinguishing between keyboards
+* ✔ &ensp; Blocking input from certain keyboard
+* ✔ &ensp; GUI for creating custom macros to run apps or send other keystrokes
+* ✔ &ensp; Admin process support
+* ✔ &ensp; Enabling and disabling the hook
+* ✔ &ensp; Saving macros  
 </br>
 
-* ➕ Creating macros for more than one extra keyboard
-* ➕ Support for modifier keys (Ctrl, Shift, Alt)
-* ➕ Support for double taps
-* ➕ Maybe your ideas! Submit them as issues with the idea tag!  
+* ➕ &ensp; Creating macros for more than one extra keyboard
+* ➕ &ensp; Support for modifier keys (Ctrl, Shift, Alt)
+* ➕ &ensp; Support for double taps
+* ➕ &ensp; Maybe your ideas! Submit them as issues with the idea tag!  
 </br>
 
-* ❌ Blocking Windows Key, Alt+Tab and State Keys (Caps Lock, Num Lock) because those are sent before RawInput gets anything
+* ❌&ensp;  Blocking Windows Key, Alt+Tab and State Keys (Caps Lock, Num Lock) because those are sent before RawInput gets anything
 
-✔ = Implemented, ➕ = Scheduled implementation, ❌ = Most Likely not implementable
+✔ &ensp; = Implemented, ➕&ensp;  = Scheduled implementation, ❌&ensp;  = Most Likely not implementable
 
 ## Building
 Here are the steps to build the project:
