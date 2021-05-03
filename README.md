@@ -30,7 +30,7 @@ Here are the steps to build the project:
 You can check the [newest release](https://github.com/VollRahm/NotEnoughHotkeys/releases/latest) to see the folder structure.
 
 ## Known Issues
-- Keystrokes in Windows Explorer and the Search bar are not blocked, because they hook the keyboard on a lower level.
+- Keystrokes are not blocked in Windows Search or in the Windows Explorer search textbox only.
 - Applications that use Global-Keyboard-Hooks for their Hotkeys still get input. The workaround is to assign Keys like F24 to your hotkey and then send F24 over NotEnoughHotkeys
 - Windows Key, Alt+Tab and State Keys (Caps Lock, Num Lock) cannot be blocked.
 - Games hook the keyboard on a lower level, so the keys won't be blocked in games.
