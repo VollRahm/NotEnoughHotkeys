@@ -59,6 +59,7 @@
                     <RadioButton Grid.Column="0" Checked="RadioButton_Checked" Content="Launch Process" x:Name="launchProcRb" HorizontalAlignment="Left" Margin="5,0,0,0" Foreground="{DynamicResource PrimaryForegroundAccent}" FontSize="15" VerticalContentAlignment="Center"/>
                     <RadioButton Grid.Column="1" Checked="RadioButton_Checked" Content="Send Keystrokes" x:Name="sendKeysRb" HorizontalAlignment="Left" Margin="5,0,0,0" Foreground="{DynamicResource PrimaryForegroundAccent}" FontSize="15" VerticalContentAlignment="Center"/>
                     <RadioButton Grid.Column="0" Grid.Row="2" Checked="RadioButton_Checked" Content="Send Single Keycode" x:Name="sendKeycodeRb" HorizontalAlignment="Left" Margin="5,0,0,0" Foreground="{DynamicResource PrimaryForegroundAccent}" FontSize="15" VerticalContentAlignment="Center"/>
+                    <RadioButton Grid.Column="1" Grid.Row="2" Checked="RadioButton_Checked" Content="Send Http Request" x:Name="sendHttpRequestRb" HorizontalAlignment="Left" Margin="5,0,0,0" Foreground="{DynamicResource PrimaryForegroundAccent}" FontSize="15" VerticalContentAlignment="Center"/>
                 </Grid>
             </StackPanel>
 
@@ -127,7 +128,7 @@
                         <Button x:Name="sendKeystrokeBtn" Click="sendKeystrokeBtn_Click" Margin="0,30,0,0" HorizontalAlignment="Center" Content="Send this Keystrokes now"></Button>
                     </StackPanel>
 
-                    <StackPanel Margin="10,0,10,0" Visibility="Visible" x:Name="sendKeycodePanel">
+                    <StackPanel Margin="10,0,10,0" Visibility="Hidden" x:Name="sendKeycodePanel">
                         <Grid Margin="0,10,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="90"/>
@@ -142,6 +143,24 @@
                             <ComboBox Grid.Column="3" SelectionChanged="sKc_keysCb_Selected" Margin="10,0,0,0" x:Name="sKc_keysCb" FontSize="16" Foreground="{DynamicResource PrimaryForegroundAccent}"  HorizontalAlignment="Stretch" Height="31"></ComboBox>
                         </Grid>
                         <Button x:Name="sendKeycodeBtn" Click="sendKeycodeBtn_Click" Margin="0,30,0,0" HorizontalAlignment="Center" Content="Send this Key now"></Button>
+                    </StackPanel>
+                    
+                    <StackPanel Margin="10,0,10,0" Visibility="Hidden" x:Name="sendHttpRequestPanel">
+                        <Grid Margin="0,10,0,0">
+                            <StackPanel>
+                                <DockPanel>
+                                    <Label Content="URL: " FontSize="17"/>
+                                    <TextBox Name="sHr_URLTb" FontSize="16" Foreground="{DynamicResource PrimaryForegroundAccent}"/>
+                                </DockPanel>
+                                <DockPanel Margin="0,10,0,0">
+                                    <Label Content="Method: " FontSize="17"/>
+                                    <Label Content="GET" FontSize="17"/>
+                                    <ToggleButton x:Name="sHr_MethodTb" HorizontalAlignment="Left" Margin="10,0,0,0"/>
+                                    <Label Content="POST" Margin="10,0,0,0" FontSize="17"/>
+                                </DockPanel>
+                                <CheckBox x:Name="sHr_clipboardCb" Content="Save response to clipboard" Foreground="{DynamicResource PrimaryForegroundAccent}" Margin="0,10,0,0" FontSize="15"/>
+                            </StackPanel>
+                        </Grid>
                     </StackPanel>
                 </Grid>
             </Border>

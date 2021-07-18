@@ -58,6 +58,10 @@ namespace NotEnoughHotkeys.Forms
                         ShowPanel(sendKeycodePanel);
                         FillSendKeycodePanel();
                         break;
+                    case "Send Http Request":
+                        ShowPanel(sendHttpRequestPanel);
+                        FillHttpRequestPanel();
+                        break;
                 }
             }
             else
@@ -81,6 +85,9 @@ namespace NotEnoughHotkeys.Forms
             else if (sendKeycodeRb.IsChecked.Value)
             {
                 ShowPanel(sendKeycodePanel);
+            }else if (sendHttpRequestRb.IsChecked.Value)
+            {
+                ShowPanel(sendHttpRequestPanel);
             }
         }
 
@@ -89,6 +96,7 @@ namespace NotEnoughHotkeys.Forms
             launchProcPanel.Visibility = Visibility.Hidden;
             sendKeysPanel.Visibility = Visibility.Hidden;
             sendKeycodePanel.Visibility = Visibility.Hidden;
+            sendHttpRequestPanel.Visibility = Visibility.Hidden;
         }
 
         private void ShowPanel(UIElement panel)
@@ -116,6 +124,14 @@ namespace NotEnoughHotkeys.Forms
         {
             var action = (SendKeycodeMacro)Macro.Action;
             sKc_KeycodeTb.Text = action.KeyCode.ToString();
+        }
+
+        private void FillHttpRequestPanel()
+        {
+            var action = (HttpRequestMacro)Macro.Action;
+            sHr_URLTb.Text = action.URL;
+            sHr_MethodTb.IsChecked = action.Method == HttpRequestMacro.RequestMethod.POST;
+            sHr_clipboardCb.IsChecked = action.ResponseToClipboard;
         }
 
         private void HotkeyTb_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -195,6 +211,9 @@ namespace NotEnoughHotkeys.Forms
             else if (sendKeycodeRb.IsChecked.Value)
             {
                 if (CheckForEmtpyTextbox(sKc_KeycodeTb)) return;
+            }else if (sendHttpRequestRb.IsChecked.Value)
+            {
+                if (CheckForEmtpyTextbox(sHr_URLTb)) return;
             }
 
             IMacroAction action = null;
@@ -208,6 +227,9 @@ namespace NotEnoughHotkeys.Forms
             }else if (sendKeycodeRb.IsChecked.Value)
             {
                 action = new SendKeycodeMacro(nameTb.Text, int.Parse(sKc_KeycodeTb.Text));
+            }else if (sendHttpRequestRb.IsChecked.Value)
+            {
+                action = new HttpRequestMacro(nameTb.Text, sHr_URLTb.Text, sHr_MethodTb.IsChecked.Value ? HttpRequestMacro.RequestMethod.POST : HttpRequestMacro.RequestMethod.GET, sHr_clipboardCb.IsChecked.Value);
             }
             MacroItem item = new MacroItem((Key)Enum.Parse(typeof(Key), hotkeyTb.Text), action);
             

@@ -107,6 +107,7 @@
     </ApplicationDefinition>
     <Compile Include="Data\Config.cs" />
     <Compile Include="Data\Constants.cs" />
+    <Compile Include="Data\Types\Actions\HttpRequestMacro.cs" />
     <Compile Include="Data\Types\Actions\IMacroAction.cs" />
     <Compile Include="Data\Types\Actions\LaunchProcessMacro.cs" />
     <Compile Include="Data\Types\Actions\SendKeycodeMacro.cs" />
