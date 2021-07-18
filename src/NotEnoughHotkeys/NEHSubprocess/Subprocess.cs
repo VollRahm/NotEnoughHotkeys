@@ -1,6 +1,6 @@
 ﻿using NEHSubprocess.Data;
 using NEHSubprocess.Misc;
-using RawInput_dll;
+using NotEnoughHotkeys.RawInputLib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -56,8 +56,9 @@ namespace NEHSubprocess
             this.ShowInTaskbar = false;
             pipeClient = new PipeClient(RecieverPipeName);
 
-            rawInput = new RawInput(Handle, false);
-            rawInput.KeyPressed += new RawKeyboard.DeviceEventHandler(RawInputHandler);
+            rawInput = new RawInput();
+            rawInput.RawKeyPressEvent += new RawInput.RawInputHandler(RawInputHandler);
+            rawInput.Start();
 
             NEHHook.StartHook(Handle);           
 
@@ -65,14 +66,14 @@ namespace NEHSubprocess
                 MessageBox.Show("Something went wrong while starting the Hook.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void RawInputHandler(object sender, RawInputEventArg e)
+        private void RawInputHandler(object sender, RawKeyPressEventArgs e)
         {
-            var ev = e.KeyPressEvent;
-            if (ev.DeviceName == hwidToBlock)
+            var kbd = e.Keyboard;
+            if (kbd.HWID == hwidToBlock)
             {
                 
                 blockNextKeystroke = true;
-                _ = HandleMacroAsync(e.KeyPressEvent.KeyPressState, e.KeyPressEvent.VKey);
+                _ = HandleKeyPressAsync(e.KeyState, e.VKey);
             }
             else
                 blockNextKeystroke = false;
@@ -92,13 +93,12 @@ namespace NEHSubprocess
             }
         }
 
-        private async Task HandleMacroAsync(string Status, int vKey)
+        private async Task HandleKeyPressAsync(KeyPressState state, int vKey)
         {
             if (isAdminProcess)
                 if (!ProcessHelper.IsForegroundProcessAdmin()) return;
 
-            Console.WriteLine($"{Status} {vKey}");
-            bool success = await pipeClient.Send($"{Status} {vKey}");
+            bool success = await pipeClient.Send($"{(int)state} {vKey}");
             if (!success)
             {
                 NEHHook.StopHook();

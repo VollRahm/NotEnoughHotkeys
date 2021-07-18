@@ -1,10 +1,9 @@
 ﻿using NotEnoughHotkeys.Misc;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -17,8 +16,9 @@ namespace NotEnoughHotkeys.SubprocessAPI
 
         public event EventHandler ProcessEnded;
 
-        private const string ExecutablePath = "bin\\NEHSubprocess.exe";
-        private const string ExecutablePathAdmin = "bin\\NEHSubprocessAdmin.exe";
+        private static string BasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\";
+        private static string ExecutablePath =  Path.Combine(BasePath + "bin\\NEHSubprocess.exe");
+        private static string ExecutablePathAdmin = Path.Combine(BasePath + "bin\\NEHSubprocessAdmin.exe");
         private ProcessStartInfo psi;
         private bool IsAdmin = false;
         private string KeyboardToBlock;
@@ -43,7 +43,7 @@ namespace NotEnoughHotkeys.SubprocessAPI
         private void PipeMessageRecieved(string Reply)
         {
             var command = Reply.Split(' ');
-            NEHKeyState state = command[0] == "MAKE" ? NEHKeyState.KeyDown : NEHKeyState.KeyUp;
+            NEHKeyState state = command[0] == "0" ? NEHKeyState.KeyDown : NEHKeyState.KeyUp;
             int KeyCode = int.Parse(command[1]);
             Key key = KeyInterop.KeyFromVirtualKey(KeyCode);
             NEHKeyPressEventArgs eventArgs = new NEHKeyPressEventArgs(state, key, KeyCode);
@@ -53,7 +53,7 @@ namespace NotEnoughHotkeys.SubprocessAPI
         public async Task StartProcess()
         {
             if (!IsAdmin)
-                ProcessLauncher.ExecuteProcessUnElevated(ExecutablePath, KeyboardToBlock, Directory.GetCurrentDirectory());
+                ProcessLauncher.ExecuteProcessUnElevated(ExecutablePath, KeyboardToBlock, BasePath);
             else
             {
                 psi = new ProcessStartInfo(ExecutablePathAdmin, KeyboardToBlock);

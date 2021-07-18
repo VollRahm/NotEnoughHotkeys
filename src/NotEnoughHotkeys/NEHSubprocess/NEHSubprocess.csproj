@@ -54,16 +54,14 @@
     <Compile Include="KeyboardHook\NEHHook.cs" />
     <Compile Include="Misc\PipeClient.cs" />
     <Compile Include="Misc\ProcessHelper.cs" />
-    <Compile Include="RawInput\DataStructures.cs" />
-    <Compile Include="RawInput\Enumerations.cs" />
-    <Compile Include="RawInput\KeyMapper.cs" />
-    <Compile Include="RawInput\KeyPressEvent.cs" />
-    <Compile Include="RawInput\PreMessageFilter.cs" />
-    <Compile Include="RawInput\RawInput.cs" />
-    <Compile Include="RawInput\RawInputEventArg.cs" />
-    <Compile Include="RawInput\RawKeyboard.cs" />
-    <Compile Include="RawInput\RegistryAccess.cs" />
-    <Compile Include="RawInput\Win32.cs" />
+    <Compile Include="RawInputLib\KeyboardHandler.cs" />
+    <Compile Include="RawInputLib\Native.cs" />
+    <Compile Include="RawInputLib\RawDevice.cs" />
+    <Compile Include="RawInputLib\RawInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RawInputLib\RawInputHelper.cs" />
+    <Compile Include="RawInputLib\RawKeyPressEventArgs.cs" />
     <Compile Include="Subprocess.cs">
       <SubType>Form</SubType>
     </Compile>

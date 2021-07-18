@@ -1,16 +1,14 @@
 ﻿using NotEnoughHotkeys.Data;
 using NotEnoughHotkeys.Data.Types;
-using NotEnoughHotkeys.Data.Types.Actions;
 using NotEnoughHotkeys.Misc;
+using NotEnoughHotkeys.RawInputLib;
 using NotEnoughHotkeys.SubprocessAPI;
-using RawInput_dll;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
+using System.Reflection;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
@@ -38,9 +36,11 @@ namespace NotEnoughHotkeys.Forms
         {
             InitializeComponent();
             MainWindowHandlers.Init(this);
+
             IsStartedAsAdmin = new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
             ConfigManager.InitPaths();
             LoadConfigs();
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
         }
 
         private void ThisMainWindow_ContentRendered(object sender, EventArgs e)
@@ -52,7 +52,7 @@ namespace NotEnoughHotkeys.Forms
                 var result = MessageBox.Show("Note: NotEnoughHotkeys was started without Admin permissions. It will only work partially and won't work inside processes with admin privileges. Do you want to restart as Admin? ", "Disclaimer", MessageBoxButton.YesNo, MessageBoxImage.Information);
                 if(result == MessageBoxResult.Yes)
                 {
-                    ProcessStartInfo psi = new ProcessStartInfo(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                    ProcessStartInfo psi = new ProcessStartInfo(Assembly.GetExecutingAssembly().Location);
                     psi.UseShellExecute = true;
                     psi.Verb = "runas";
                     Process.Start(psi);
@@ -60,24 +60,28 @@ namespace NotEnoughHotkeys.Forms
                 }
             }
             var Handle = new WindowInteropHelper(this).Handle;
-            rawInput = new RawInput(Handle, false);
-            rawInput.KeyPressed += new RawKeyboard.DeviceEventHandler(RawInputHandler);
+            rawInput = new RawInput();
+            rawInput.RawKeyPressEvent += new RawInput.RawInputHandler(RawInputHandler);
+            rawInput.Start();
             trayIcon = new TrayIcon(this);
             settingsWindow = new SettingsWindow();
         }
 
-        private async void RawInputHandler(object sender, RawInputEventArg e)
+        private async void RawInputHandler(object sender, RawKeyPressEventArgs e)
         {
-            if (IsSettingKeyboard && e.KeyPressEvent.KeyPressState == KEYUP)
+            if (IsSettingKeyboard && e.KeyState == KeyPressState.Up)
             {
-                Data.Types.Keyboard kbd = Helper.GetKeyboardInfo(e.KeyPressEvent.DeviceName);
-                kbd.HWID = e.KeyPressEvent.DeviceName;
-                kbd.Name = e.KeyPressEvent.Name;
+                Data.Types.Keyboard kbd = new Data.Types.Keyboard();
+                var kbdInfo = Helper.GetKeyboardInfo(e.Keyboard.HWID);
+                kbd.Description = kbdInfo.Item1;
+                kbd.HWID = e.Keyboard.HWID;
+                kbd.Name = e.Keyboard.Name;
+                kbd.Layout = kbdInfo.Item2;
                 Variables.Config.TargetKeyboard = kbd;
-
+                
                 selectKeyboardBtn.Content = "Select";
                 selectKeyboardBtn.IsHitTestVisible = true; //enable button click handler
-                currentKeyboardLbl.Content = "Keyboard: " + e.KeyPressEvent.Name;
+                currentKeyboardLbl.Content = "Keyboard: " + e.Keyboard.Name;
                 currentKeyboardLbl.Foreground = Helper.GetFromResources<SolidColorBrush>("PrimaryForegroundAccent");
                 kbdInfoBtn.IsEnabled = true;
                 IsSettingKeyboard = false;

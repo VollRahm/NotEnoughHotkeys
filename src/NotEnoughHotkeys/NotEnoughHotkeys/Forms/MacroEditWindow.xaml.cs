@@ -2,22 +2,15 @@
 using NotEnoughHotkeys.Data.Types;
 using NotEnoughHotkeys.Data.Types.Actions;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using static NotEnoughHotkeys.Misc.Helper;
 
 namespace NotEnoughHotkeys.Forms
 {
@@ -65,6 +58,10 @@ namespace NotEnoughHotkeys.Forms
                         ShowPanel(sendKeycodePanel);
                         FillSendKeycodePanel();
                         break;
+                    case "Send Http Request":
+                        ShowPanel(sendHttpRequestPanel);
+                        FillHttpRequestPanel();
+                        break;
                 }
             }
             else
@@ -88,6 +85,9 @@ namespace NotEnoughHotkeys.Forms
             else if (sendKeycodeRb.IsChecked.Value)
             {
                 ShowPanel(sendKeycodePanel);
+            }else if (sendHttpRequestRb.IsChecked.Value)
+            {
+                ShowPanel(sendHttpRequestPanel);
             }
         }
 
@@ -96,6 +96,7 @@ namespace NotEnoughHotkeys.Forms
             launchProcPanel.Visibility = Visibility.Hidden;
             sendKeysPanel.Visibility = Visibility.Hidden;
             sendKeycodePanel.Visibility = Visibility.Hidden;
+            sendHttpRequestPanel.Visibility = Visibility.Hidden;
         }
 
         private void ShowPanel(UIElement panel)
@@ -123,6 +124,14 @@ namespace NotEnoughHotkeys.Forms
         {
             var action = (SendKeycodeMacro)Macro.Action;
             sKc_KeycodeTb.Text = action.KeyCode.ToString();
+        }
+
+        private void FillHttpRequestPanel()
+        {
+            var action = (HttpRequestMacro)Macro.Action;
+            sHr_URLTb.Text = action.URL;
+            sHr_MethodTb.IsChecked = action.Method == HttpRequestMacro.RequestMethod.POST;
+            sHr_clipboardCb.IsChecked = action.ResponseToClipboard;
         }
 
         private void HotkeyTb_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -202,6 +211,9 @@ namespace NotEnoughHotkeys.Forms
             else if (sendKeycodeRb.IsChecked.Value)
             {
                 if (CheckForEmtpyTextbox(sKc_KeycodeTb)) return;
+            }else if (sendHttpRequestRb.IsChecked.Value)
+            {
+                if (CheckForEmtpyTextbox(sHr_URLTb)) return;
             }
 
             IMacroAction action = null;
@@ -215,6 +227,9 @@ namespace NotEnoughHotkeys.Forms
             }else if (sendKeycodeRb.IsChecked.Value)
             {
                 action = new SendKeycodeMacro(nameTb.Text, int.Parse(sKc_KeycodeTb.Text));
+            }else if (sendHttpRequestRb.IsChecked.Value)
+            {
+                action = new HttpRequestMacro(nameTb.Text, sHr_URLTb.Text, sHr_MethodTb.IsChecked.Value ? HttpRequestMacro.RequestMethod.POST : HttpRequestMacro.RequestMethod.GET, sHr_clipboardCb.IsChecked.Value);
             }
             MacroItem item = new MacroItem((Key)Enum.Parse(typeof(Key), hotkeyTb.Text), action);
             
@@ -246,6 +261,7 @@ namespace NotEnoughHotkeys.Forms
 
         private void sKc_keysCb_Selected(object sender, RoutedEventArgs e)
         {
+            if(!sKc_KeycodeTb.IsFocused)
             sKc_KeycodeTb.Text = KeyInterop.VirtualKeyFromKey((Key)sKc_keysCb.SelectedItem).ToString();
         }
 
@@ -289,10 +305,40 @@ namespace NotEnoughHotkeys.Forms
             }
             else
             {
-                
                 e.CancelCommand();
             }
-            
+        }
+
+        private async void sendKeycodeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            await SendKeyTimer((Button)sender, 5);
+            try
+            {
+                byte KeyCode = (byte)int.Parse(sKc_KeycodeTb.Text);
+                NativeMethods.keybd_event(KeyCode, 0, NativeMethods.KEYEVENTF_EXTENDEDKEY, new UIntPtr(0));
+                await Task.Delay(10);
+                NativeMethods.keybd_event(KeyCode, 0, NativeMethods.KEYEVENTF_KEYUP, new UIntPtr(0));
+            }
+            catch { }
+        }
+
+        private async void sendKeystrokeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            await SendKeyTimer((Button)sender, 5);
+            System.Windows.Forms.SendKeys.SendWait(sK_KeystrokeTb.Text);
+        }
+
+        private async Task SendKeyTimer(Button btn, int seconds)
+        {
+            var btnText = btn.Content;
+            btn.IsEnabled = false;
+            for (int i = seconds; i > 0; i--)
+            {
+                await this.Dispatcher.InvokeAsync(() => btn.Content = i.ToString() + "...");
+                await Task.Delay(1000);
+            }
+            btn.IsEnabled = true;
+            this.Dispatcher.Invoke(() => btn.Content = btnText);
         }
     }
 }
